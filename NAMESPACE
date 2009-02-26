@@ -1,0 +1,8 @@
+export(corr_iita, hasse, iita, imp2state, ind_gen, mini_iita,
+       ob_counter, orig_iita, pattern, pop_iita, pop_variance, simu,
+       state2imp, variance)
+
+# internal functions; not intended to be visible to users
+# export()
+
+import(graphics, relations, sets)
