@@ -37,8 +37,11 @@ orig_iita(dataset, A)
 }
 \value{
   If the arguments \code{dataset} and \code{A} are of required types,
-  \code{corr_iita} returns a vector of the \emph{diff} values
-  corresponding to the competing quasi orders in \code{A}.
+  \code{corr_iita} returns a named list of the following components:
+
+\item{diff.value}{a vector of the \emph{diff} values
+  corresponding to the competing quasi orders in \code{A}.}
+\item{error.rate}{a vector of the error rates corresponding to the competing quasi orders in \code{A}.}
 }
 \references{
   Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:

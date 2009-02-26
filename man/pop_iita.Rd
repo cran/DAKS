@@ -11,7 +11,7 @@
   selectively.
 }
 \usage{
-pop_iita(imp, ce, lg, items, dataset = NULL, v)
+pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
 }
 \arguments{
   \item{imp}{a required object of class \code{\link[sets]{set}}
@@ -27,6 +27,8 @@ pop_iita(imp, ce, lg, items, dataset = NULL, v)
   \item{dataset}{an optional data frame or matrix consisting of
     binary, \eqn{1} or \eqn{0}, numeric data.  The default
     \code{dataset = NULL} corresponds to no dataset being used.}
+  \item{A}{an optional list of competing quasi orders (surmise
+    relations).}
   \item{v}{a required numeric giving the inductive item tree analysis
     algorithm to be performed, in population quantities; \code{v = 1}
     (minimized corrected), \code{v = 2} (corrected), and \code{v = 3}
@@ -83,11 +85,13 @@ pop_iita(imp, ce, lg, items, dataset = NULL, v)
     orders (subject to selected version that was performed).}
   \item{pop.matrix}{a matrix of all possible response patterns and
     their corresponding population occurrence probabilities.}
-  \item{error_pop}{a vector of the population \eqn{\gamma}{gamma}
+  \item{error.pop}{a vector of the population \eqn{\gamma}{gamma}
     rates corresponding to the (inductively generated) competing quasi
     orders (subject to selected version that was performed).}
   \item{selection.set}{a list of the (inductively generated) competing
     quasi orders.}
+  \item{v}{the version used; \code{v = 1} (minimized corrected),
+    \code{v = 2} (corrected), and \code{v = 3} (original).} 
 }
 \references{
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.

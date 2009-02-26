@@ -5,13 +5,13 @@
 \concept{simulated data}
 \concept{simulated quasi order}
 \title{
-  Data Simulation Tool
+  Data and Quasi Order Simulation Tool
 }
 \description{
   \code{simu} can be used to simulate binary, of type \eqn{1}/\eqn{0},
-  data using a basic local independence model.  The number of
+  data using a basic local independence model. The number of
   items, the sample size, and two parameters for the careless error
-  and lucky guess probabilities can be set explicitly.  The underlying
+  and lucky guess probabilities can be set explicitly. The underlying
   combinatorial structure used for simulating the data can either be
   specified manually or is generated randomly.
 }

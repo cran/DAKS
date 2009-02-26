@@ -21,7 +21,7 @@
   \tabular{ll}{
     Package: \tab \pkg{DAKS}\cr
     Type: \tab Package\cr
-    Version: \tab 1.0-0\cr
+    Version: \tab 2.0-0\cr
     Date: \tab 2009-02-23\cr
     License: \tab \acronym{GPL} (>= 2)
   }
@@ -43,8 +43,9 @@
   \code{\link{mini_iita}}, \code{\link{ob_counter}},
   \code{\link{orig_iita}}, \code{\link{pattern}},
   \code{\link{pop_iita}}, \code{\link{pop_variance}},
-  \code{\link{simu}}, \code{\link{state2imp}}, and
-  \code{\link{variance}}.  There is an empirical dataset,
+  \code{\link{print.iita}}, \code{\link{print.pat}}, \code{\link{print.popiita}}, \code{\link{print.summpopiita}}, \code{\link{print.ztest}},
+  \code{\link{simu}}, \code{\link{state2imp}}, \code{\link{summary.popiita}},
+  \code{\link{variance}}, and \code{\link{z_test}}.  There is an empirical dataset,
   \code{\link{pisa}}, accompanying the package \pkg{DAKS}.  This
   dataset is part of the 2003 Programme for International Student
   Assessment (PISA; \url{http://www.pisa.oecd.org/}).

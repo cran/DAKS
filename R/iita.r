@@ -27,18 +27,20 @@ stop("IITA version must be specified")
 # call to the chosen algorithm
 if(v == 3){
 i<-ind_gen(ob_counter(dataset))
-ii<-orig_iita(dataset, ind_gen(ob_counter(dataset)))
+ii<-orig_iita(dataset, i)
 }
 
 if(v == 2){
 i<-ind_gen(ob_counter(dataset))
-ii<-corr_iita(dataset, ind_gen(ob_counter(dataset)))
+ii<-corr_iita(dataset, i)
 }
 
 if(v == 1){
 i<-ind_gen(ob_counter(dataset))
-ii<-mini_iita(dataset, ind_gen(ob_counter(dataset)))
+ii<-mini_iita(dataset, i)
 }
 
-return(list(diff = ii, implications = i[which(ii == min(ii))][[1]]))
+obj<-list(diff = ii[[1]], implications = i[which.min(ii[[1]])][[1]], error.rate = ii[[2]][which.min(ii[[1]])], selection.set.index = which.min(ii[[1]])[[1]], v=v)
+class(obj)<-"iita"
+return(obj)
 }

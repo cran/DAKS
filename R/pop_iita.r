@@ -10,10 +10,14 @@
 #                                                    # 
 ######################################################
 
-pop_iita<-function(imp, ce, lg, items, dataset = NULL, v){
+pop_iita<-function(imp, ce, lg, items, dataset = NULL, A = NULL, v){
 
 if(v != 1 && v != 2 && v !=3){
 stop("IITA version must be specified")
+}
+
+if(is.null(dataset) == FALSE && is.null(A) == FALSE){
+stop("Either the dataset or the selection set can be specified")
 }
 
 p_pop<-vector(length = items)
@@ -120,7 +124,7 @@ if(i != j){b_pop[i,j]<-sum(pop_matrix[c(tmp1,tmp2)[duplicated(c(tmp1, tmp2))] ,i
 }
 }
 
-if(is.null(dataset)){
+if(is.null(dataset) && is.null(A)){
 #inductive generation process on population values
 S<-list()
 A<-list()
@@ -168,7 +172,9 @@ k<-k+1
 A<-A[(!duplicated(A))]
 A<-A[!set_is_empty(A)]
 }else{
+if(is.null(dataset) == FALSE){
 A<-ind_gen(ob_counter(dataset))
+}
 }
 
 error_pop<-vector(length = (length(A)))
@@ -180,6 +186,15 @@ error_pop_theo[,i]<-b_pop[,i] / p_pop[i]
 }
 
 if(v == 3 | v == 2){
+
+all_imp<-set()
+
+for(i in 1:(items-1)){
+for(j in (i+1):items){
+all_imp<-set_union(all_imp, set(tuple(i,j), tuple(j,i)))
+}
+}
+
 #Gamma_L
 for(k in 1:length(A)){
 for(i in A[[k]]){
@@ -225,7 +240,9 @@ if(is.element(set(tuple(i,j)), A[[k]]) == FALSE && i != j){bs_pop_alt[i,j]<-(1-p
 if(set_is_empty(A[[k]])){diff_value_pop_alt[k]<-NA}
 if(set_is_empty(A[[k]]) == FALSE) {diff_value_pop_alt[k]<-sum((b_pop - bs_pop_alt)^2) / (items^2 - items)}
 }
-return(list(pop.diff = diff_value_pop_alt, pop.matrix = pop_matrix, error.pop = error_pop, selection.set = A))
+obj<-list(pop.diff = diff_value_pop_alt, pop.matrix = pop_matrix, error.pop = error_pop, selection.set = A, v = v)
+class(obj)<-"popiita"	
+return(obj)
 }
 
 if(v == 2){
@@ -242,7 +259,9 @@ if(is.element(set(tuple(i,j)), A[[k]]) == FALSE && is.element(set(tuple(j,i)), A
 if(set_is_empty(A[[k]])){diff_value_pop_neu[k]<-NA}
 if(set_is_empty(A[[k]]) == FALSE) {diff_value_pop_neu[k]<-sum((b_pop - bs_pop_neu)^2) / (items^2 - items)}
 }
-return(list(pop.diff = diff_value_pop_neu, pop.matrix = pop_matrix, error.pop = error_pop, selection.set = A))
+obj<-list(pop.diff = diff_value_pop_neu, pop.matrix = pop_matrix, error.pop = error_pop, selection.set = A, v = v)
+class(obj)<-"popiita"	
+return(obj)
 }
 
 if(v == 1){
@@ -259,6 +278,8 @@ if(is.element(set(tuple(i,j)), A[[k]]) == FALSE && is.element(set(tuple(j,i)), A
 if(set_is_empty(A[[k]])){diff_value_pop_num[k]<-NA}
 if(set_is_empty(A[[k]]) == FALSE) {diff_value_pop_num[k]<-sum((b_pop - bs_pop_num)^2) / (items^2 - items)}
 }
-return(list(pop.diff = diff_value_pop_num, pop.matrix = pop_matrix, error.pop = error_pop_num, selection.set = A))
+obj<-list(pop.diff = diff_value_pop_num, pop.matrix = pop_matrix, error.pop = error_pop_num, selection.set = A, v = v)
+class(obj)<-"popiita"	
+return(obj)
 }
 }

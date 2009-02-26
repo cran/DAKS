@@ -45,10 +45,18 @@ error_num[k]<- -(x[1] + x[2]) / (x[3] + x[4])
 }
 
 #computation of diff values
+all_imp<-set()
+
+for(i in 1:(m-1)){
+for(j in (i+1):m){
+all_imp<-set_union(all_imp, set(tuple(i,j), tuple(j,i)))
+}
+}
+
 for(k in 1:length(A)){
 if(set_is_empty(A[[k]])){diff_value_num[k]<-NA}
 else{
-for(i in A[[length(A)]]){
+for(i in all_imp){
 if(is.element(set(i), A[[k]])) {bs_num[[k]][as.integer(i[1]),as.integer(i[2])]<-error_num[k] * sum(dataset[,as.integer(i[2])])}
 if(is.element(set(i), A[[k]]) == FALSE && is.element(set(tuple(as.integer(i[2]),as.integer(i[1]))), A[[k]]) == FALSE){bs_num[[k]][as.integer(i[1]),as.integer(i[2])]<-(1- sum(dataset[,as.integer(i[1])]) / n) * sum(dataset[,as.integer(i[2])])}
 if(is.element(set(i), A[[k]]) == FALSE && is.element(set(tuple(as.integer(i[2]),as.integer(i[1]))), A[[k]]) == TRUE){bs_num[[k]][as.integer(i[1]),as.integer(i[2])]<-sum(dataset[,as.integer(i[2])]) - sum(dataset[,as.integer(i[1])]) + sum(dataset[,as.integer(i[1])]) * error_num[k]}
@@ -57,5 +65,5 @@ diff_value_num[k]<-sum((b - bs_num[[k]])^2) / (m^2 - m)
 }
 }
 
-return(diff_value_num)
+return(list(diff.value = diff_value_num, error.rate = error_num))
 }

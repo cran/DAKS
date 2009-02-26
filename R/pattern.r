@@ -20,10 +20,16 @@ if(n < 1) stop("Number of patterns must be greater than zero.\n")
 if(n > length(pattern)) n = length(pattern)
 
 if(is.null(P)){
-return(list(response.pattern = pattern[1:n], states = P))
+out<-list(response.patterns = pattern[1:n], states = P, n = n)
 }else{
 states<-cbind(P, 0)
 states[,ncol(states)] <- sapply(apply(P, 1, function(x) pattern[names(pattern) == paste(x, collapse = "")]), function(y) max(0, y))
-return(list(response.pattern = pattern[1:n],states = states))
+if(is.null(names(dataset)) == FALSE){
+colnames(states)<-c(names(dataset), "size")
+rownames(states)<-NULL
 }
+out<-list(response.patterns = pattern[1:n],states = states, n = n)
+}
+class(out)<-"pat"
+out
 }

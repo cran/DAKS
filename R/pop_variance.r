@@ -123,7 +123,7 @@ for(k in 1:items){
 for(h in 1:items){
 if(is.element(set(tuple(k,h)), imp) && k !=h){
 if(pop_matrix[i,k] == 0 && pop_matrix[i,h] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error_pop) * (1-error_pop - (rho_sum[h])*gamma_deriv[i-1])
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error_pop) * (1 - error_pop - (rho_sum[h])*gamma_deriv[i-1])
 }else{
 if(pop_matrix[i, h] == 1){
 grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error_pop) * (-error_pop - rho_sum[h] * gamma_deriv[i-1] )
@@ -157,7 +157,7 @@ grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) 
 }else{
 if(pop_matrix[i,h] == 1){
 if(pop_matrix[i,k] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * (rho_sum[h] - (1 - rho_sum[k])) 
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * (rho_sum[h] - 1 + rho_sum[k]) 
 }else{
 grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * rho_sum[h]
 }
@@ -171,5 +171,6 @@ grad<-grad / (items * (items-1))
 
 #final computation
 variance<- grad%*%exp_fish%*%grad
+variance<-as.vector(variance)
 return(variance)
 }

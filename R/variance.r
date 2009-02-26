@@ -25,27 +25,11 @@ stop("IITA version must be specified")
 items<-ncol(dataset)
 
 #Number of times a pattern occurs 
-patterns<-matrix(0,ncol = ncol(dataset)+1, nrow = 2^ncol(dataset))
-for(j in 1:ncol(patterns)-1){
-patterns[,j]<-c(rep(0,2^(ncol(dataset)-j)), rep(1,2^(ncol(dataset)-j)))
+pat<-matrix(0,ncol = ncol(dataset), nrow = 2^ncol(dataset))
+for(j in 1:ncol(pat)){
+pat[,j]<-c(rep(0,2^(ncol(dataset)-j)), rep(1,2^(ncol(dataset)-j)))
 }
-dataset_2<-matrix(nrow = nrow(dataset),ncol = 1 )
-for(i in 1:nrow(dataset)){
-dataset_2[i,]<-toString(dataset[i,])
-}
-tot_cases<-table(dataset_2)
-if(length(tot_cases) == 2^(ncol(patterns)-1)){
-patterns[,ncol(patterns)]<-tot_cases
-}else{
-for(i in 1:length(tot_cases)){
-for(j in i:nrow(patterns)){
-if(sum(as.integer(strsplit(dimnames(tot_cases)$dataset_2[i], ", ")[[1]][1:(ncol(patterns)-1)]) == patterns[j,1:(ncol(patterns)-1)]) == ncol(patterns)-1){
-patterns[j,ncol(patterns)]<-tot_cases[[i]] 
-break
-}
-}
-}
-}
+patterns<-pattern(dataset, P = pat)$states
 
 #relative frequencies
 rho_sum<-vector(length = items)
@@ -176,7 +160,7 @@ for(k in 1:items){
 for(h in 1:items){
 if(is.element(set(tuple(k,h)), imp) && k !=h){
 if(patterns[i,k] == 0 && patterns[i,h] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error) * (1-error - (rho_sum[h])*gamma_deriv[i-1])
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error) * (1 - error - (rho_sum[h])*gamma_deriv[i-1])
 }else{
 if(patterns[i, h] == 1){
 grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error) * (-error - rho_sum[h] * gamma_deriv[i-1] )
@@ -186,21 +170,17 @@ grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] * error) * (-rho_s
 }
 }
 if(is.element(set(tuple(k,h)), imp) == FALSE && is.element(set(tuple(h,k)), imp) && k !=h){
-if(patterns[i,k] == 0 && patterns[i,h] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (-rho_sum[k] * gamma_deriv[i-1])
-}else{
+if(patterns[i,k] == 1){
 if(patterns[i,h] == 1){
-if(patterns[i,k] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (-1 + 1 - error - rho_sum[k] * gamma_deriv[i-1])
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * ( - error - rho_sum[k] * gamma_deriv[i-1])
 }else{
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (-1 - rho_sum[k] * gamma_deriv[i-1])
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (1 - error - rho_sum[k] * gamma_deriv[i-1])
 }
 }else{
 if(patterns[i,k] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (1 - error - rho_sum[k] * gamma_deriv[i-1])
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (-rho_sum[k] * gamma_deriv[i-1])
 }else{
 grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - rho_sum[h] + rho_sum[k] - rho_sum[k] * error) * (-rho_sum[k] * gamma_deriv[i-1])
-}
 }
 }
 }
@@ -210,7 +190,7 @@ grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) 
 }else{
 if(patterns[i,h] == 1){
 if(patterns[i,k] == 1){
-grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * (rho_sum[h] - (1 - rho_sum[k])) 
+grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * (rho_sum[h] - 1 + rho_sum[k]) 
 }else{
 grad[i-1]<-grad[i-1] + 2 * (rho_sum_counter[k,h] - (1-rho_sum[k]) * rho_sum[h]) * rho_sum[h]
 }
@@ -224,5 +204,6 @@ grad<-grad / (items * (items-1))
 
 #final computation
 variance<- grad%*%exp_fish%*%grad
+variance<-as.vector(variance)
 return(variance)
 }

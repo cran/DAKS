@@ -56,6 +56,7 @@ pattern(dataset, n = 5, P = NULL)
     frequencies in \code{dataset}.  Each row represents a knowledge
     state, the last column gives the frequencies of the states.  If
     \code{P = NULL}, the component \code{states} is \code{NULL}.}
+  \item{n}{a value specifying the number of states to print.}
 }
 \references{
   Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:

@@ -13,23 +13,28 @@ struct<-relation(domain = list(1:items,1:items),graph = imp)
 
 #computation of parallel items
 parallel<-list()
-k<-1
 for(i in 1:items){
 for(j in i:items){
 if(relation_incidence(struct)[i,j] ==1 && relation_incidence(struct)[j,i] ==1){
-parallel[[k]]<-tuple(i,j)
-k<-k+1
+if(length(parallel) == 0){parallel[[i]]<-set(i,j)} 
+if(length(parallel) > 0 && length(parallel) < i && sum(sapply(parallel, function(x) is.element(i,x))) == 0){parallel[[i]]<-set(i,j)}
+if(is.null(parallel[i][[1]])){}else{
+if(sum(sapply(parallel[[i]], function(x) is.element(i,x))) > 0){parallel[[i]]<-set_union(parallel[[i]], set(i,j))}
 }
 }
 }
+}
+parallel<-parallel[!sapply(parallel, is.null)]
 
 #collapsing of parallel items
 if(length(parallel) > 0){
-pardrop<-vector(length = length(parallel))
+pardrop<-0
 for(i in 1:length(parallel)){
-pardrop[i]<-as.integer(parallel[[i]][2])
+if(pardrop[1] == 0){pardrop<-sapply(parallel[[i]],invisible)[2:length(parallel[[i]])]}
+else{
+pardrop<-c(pardrop,sapply(parallel[[i]],invisible)[2:length(parallel[[i]])])
 }
-pardrop<-pardrop[!duplicated(pardrop)]
+}
 
 nparitems<-1:items
 nparitems<-nparitems[-pardrop]

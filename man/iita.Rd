@@ -68,8 +68,11 @@ iita(dataset, v)
   \item{implications}{an object of class \code{\link[sets]{set}}
     representing the solution quasi order (with smallest \emph{diff}
     value) under the selected algorithm.}
-  \item{selection_set_index}{a numeric giving the index of the
+  \item{error.rate}{a value giving the estimated error rate corresponding to the best fitting quasi order.}
+  \item{selection.set.index}{a numeric giving the index of the
     solution quasi order in the selection set.}
+  \item{v}{the version used; \code{v = 1} (minimized corrected),
+    \code{v = 2} (corrected), and \code{v = 3} (original).} 
 }
 \references{
   Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
