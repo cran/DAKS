@@ -13,16 +13,16 @@
   functions for computing population and estimated asymptotic
   variances of the \emph{diff} fit measures, and for switching between
   test item and knowledge state representations.  Other features are a
-  Hasse diagram drawing device, a data simulation tool based on a
-  finite mixture latent variable model, and a function for computing
-  response pattern and knowledge state frequencies.
+  Hasse diagram drawing device, a data and quasi order simulation tool
+  based on a finite mixture latent variable model, and a function for
+  computing response pattern and knowledge state frequencies.
 }
 \details{
   \tabular{ll}{
     Package: \tab \pkg{DAKS}\cr
     Type: \tab Package\cr
-    Version: \tab 2.0-0\cr
-    Date: \tab 2009-02-23\cr
+    Version: \tab 2.1-0\cr
+    Date: \tab 2010-06-19\cr
     License: \tab \acronym{GPL} (>= 2)
   }
   Knowledge space theory is a recent psychometric test theory based on
@@ -43,41 +43,42 @@
   \code{\link{mini_iita}}, \code{\link{ob_counter}},
   \code{\link{orig_iita}}, \code{\link{pattern}},
   \code{\link{pop_iita}}, \code{\link{pop_variance}},
-  \code{\link{print.iita}}, \code{\link{print.pat}}, \code{\link{print.popiita}}, \code{\link{print.summpopiita}}, \code{\link{print.ztest}},
-  \code{\link{simu}}, \code{\link{state2imp}}, \code{\link{summary.popiita}},
-  \code{\link{variance}}, and \code{\link{z_test}}.  There is an empirical dataset,
-  \code{\link{pisa}}, accompanying the package \pkg{DAKS}.  This
+  \code{\link{print.iita}}, \code{\link{print.pat}},
+  \code{\link{print.popiita}}, \code{\link{print.summpopiita}},
+  \code{\link{print.ztest}}, \code{\link{simu}}, \code{\link{state2imp}},
+  \code{\link{summary.iita}}, \code{\link{summary.popiita}},
+  \code{\link{variance}}, and \code{\link{z_test}}.  There is an empirical
+  dataset, \code{\link{pisa}}, accompanying the package \pkg{DAKS}.  This
   dataset is part of the 2003 Programme for International Student
   Assessment (PISA; \url{http://www.pisa.oecd.org/}).
 }
 \author{
   Anatol Sargin, Ali Uenlue
 
-  Maintainer: Anatol Sargin <anatol.sargin@math.uni-augsburg.de>,
-              Ali Uenlue <ali.uenlue@math.uni-augsburg.de>
+  Maintainer: Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \references{
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
-
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
   Schrepp, M. (1999) On the empirical construction of implications
-  between bi-valued test items.  \emph{Mathematical Social Sciences},
+  between bi-valued test items. \emph{Mathematical Social Sciences},
   \bold{38}, 361--375.
 
   Schrepp, M. (2003) A method for the analysis of hierarchical
-  dependencies between items of a questionnaire.  \emph{Methods of
+  dependencies between items of a questionnaire. \emph{Methods of
   Psychological Research}, \bold{19}, 43--79.
 
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+  Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
+
+   Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication.
 }
 \keyword{package}

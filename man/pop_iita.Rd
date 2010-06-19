@@ -48,16 +48,16 @@ pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
   three data analysis methods differ in their choices of estimates for
   the expected numbers of counterexamples.  For details see
   \code{\link{iita}}.  The algorithms are described in the paper about
-  the \pkg{DAKS} package by \cite{Sargin and Uenlue (2009)}, and in
+  the \pkg{DAKS} package by \cite{Uenlue and Sargin (2010)}, and in
   the papers by \cite{Sargin and Uenlue (2009)} and
-  \cite{Uenlue and Sargin (2008)}.
+  \cite{Uenlue and Sargin (2010)}.
 
   Compared to \code{\link{iita}}, the function \code{pop_iita}
   implements the three inductive item tree analysis algorithms in
   population, \bold{not} sample, quantities.  The argument \code{imp}
   must give a quasi order, and equipped with the error probabilities
   \code{ce} and \code{lg}, it is considered a special case of the
-  basic local independence model (\cite{Doignon \& Falmagne, 1999}).
+  basic local independence model (\cite{Doignon and Falmagne, 1999}).
   The latter then is considered as the underlying population model.
   If \code{dataset = NULL} a set of competing quasi orders is
   constructed based on a population analog of the inductive generation
@@ -77,8 +77,9 @@ pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
 }
 \value{
   If the arguments \code{imp}, \code{ce}, \code{lg}, \code{items},
-  \code{dataset}, and \code{v} are of required types, \code{pop_iita}
-  returns a named list consisting of the following four components:
+  \code{dataset}, \code{A}, and \code{v} are of required types,
+  \code{pop_iita} returns a named list consisting of the following five
+  components:
 
   \item{pop.diff}{a vector giving the population \emph{diff} values
     corresponding to the (inductively generated) competing quasi
@@ -97,21 +98,20 @@ pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
-
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
+  
+ Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication.
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   The single careless error \code{ce} and lucky guess \code{lg}

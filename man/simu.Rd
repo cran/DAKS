@@ -41,7 +41,7 @@ simu(items, size, ce, lg, imp = NULL, delta)
   The function \code{simu} simulates data using a special case of the
   basic local independence model, which is a fundamental restricted
   latent class model in knowledge space theory
-  (\cite{Doignon \& Falmagne, 1999}).  The single careless error
+  (\cite{Doignon and Falmagne, 1999}).  The single careless error
   \code{ce} and lucky guess \code{lg} probabilities are assumed to be
   constant over all items.  The most general case that can be
   specified thus includes two error probabilities at each item, the
@@ -93,21 +93,20 @@ simu(items, size, ce, lg, imp = NULL, delta)
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392. 
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision. 
 
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+ Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication. 
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   To pass a quasi order as the argument \code{imp} to \code{simu} it

@@ -44,17 +44,16 @@ corr_iita(dataset, A)
 \item{error.rate}{a vector of the error rates corresponding to the competing quasi orders in \code{A}.}
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   The function \code{\link{iita}} can be used to perform one of the

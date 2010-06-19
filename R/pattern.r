@@ -26,7 +26,10 @@ states<-cbind(P, 0)
 states[,ncol(states)] <- sapply(apply(P, 1, function(x) pattern[names(pattern) == paste(x, collapse = "")]), function(y) max(0, y))
 if(is.null(names(dataset)) == FALSE){
 colnames(states)<-c(names(dataset), "size")
-rownames(states)<-NULL
+rownames(states)<-c(paste("State", 1:(nrow(states))))
+}else{
+colnames(states)<-c(paste("Item", 1:(ncol(dataset))), "size")
+rownames(states)<-c(paste("State", 1:(nrow(states))))
 }
 out<-list(response.patterns = pattern[1:n],states = states, n = n)
 }

@@ -52,21 +52,20 @@ pop_variance(pop_matrix, imp, error_pop, v)
   \code{imp} and the \eqn{\gamma}{gamma} rate in \code{error_pop}).
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
+  
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision. 
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
-
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+ Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication. 
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   The current version of the package \pkg{DAKS} does not support

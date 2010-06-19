@@ -5,7 +5,7 @@
 #                                            #
 ##############################################
 
-z_test<-function(dataset, imp, imp_alt = NULL, alternative = c("two.sided", "less","greater"), mu = 0, conf.level = 0.95, v){
+z_test<-function(dataset, imp, imp_alt = NULL, alternative = c("two.sided", "less", "greater"), mu = 0, conf.level = 0.95, v){
 if(is.null(imp_alt)){
 if(v == 1){iita_imp<-mini_iita(dataset, list(imp))}
 if(v == 2){iita_imp<-corr_iita(dataset, list(imp))}	

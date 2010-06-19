@@ -31,13 +31,13 @@ imp2state(imp, items)
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+ Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   For any set of implications the returned knowledge structure is a

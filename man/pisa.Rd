@@ -24,18 +24,15 @@ pisa
   publicly).
 }
 \source{
-  OECD Programme for International Student Assessment (PISA).
-  \url{http://www.pisa.oecd.org/}
+  OECD Programme for International Student Assessment (PISA;
+  \url{http://www.pisa.oecd.org/})
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
-}
+
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data analysis methods in knowledge space theory. Manuscript under revision.}
 \seealso{
   See \code{\link{DAKS-package}} for general information about this
   package.

@@ -47,7 +47,7 @@ pattern(dataset, n = 5, P = NULL)
 \value{
   If the arguments \code{dataset}, \code{n}, and \code{P} are of
   required types, \code{pattern} returns a named list consisting of
-  the following two components:
+  the following three components:
 
   \item{response.patterns}{an array giving the response patterns (with
     the \eqn{n} highest frequencies) and their absolute frequencies in 
@@ -56,20 +56,24 @@ pattern(dataset, n = 5, P = NULL)
     frequencies in \code{dataset}.  Each row represents a knowledge
     state, the last column gives the frequencies of the states.  If
     \code{P = NULL}, the component \code{states} is \code{NULL}.}
-  \item{n}{a value specifying the number of states to print.}
+  \item{n}{a numeric giving the number of response patterns that are
+    returned.}
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+}
+\note{
+  Although \code{pattern} is intended for use with dichotomous data, it
+  also works with polytomously scored items.
 }
 \seealso{
   \code{\link{ob_counter}} for computation of numbers of

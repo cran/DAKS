@@ -38,9 +38,9 @@ iita(dataset, v)
   counterexamples.  Their response patterns contradict the
   interpretation of \eqn{(i, j)} as `mastering item \eqn{j} implies
   mastering item \eqn{i}.') The algorithms are described in the paper
-  about the \pkg{DAKS} package by \cite{Sargin and Uenlue (2009)}, and
+  about the \pkg{DAKS} package by \cite{Uenlue and Sargin (2010)}, and
   in the papers by \cite{Sargin and Uenlue (2009)} and
-  \cite{Uenlue and Sargin (2008)}.
+  \cite{Uenlue and Sargin (2010)}.
 
   \code{iita} calls \code{\link{ind_gen}} for constructing the set of
   competing quasi orders according to the inductive generation
@@ -60,7 +60,7 @@ iita(dataset, v)
 }
 \value{
   If the arguments \code{dataset} and \code{v} are of required types,
-  \code{iita} returns a named list consisting of the following three
+  \code{iita} returns a named list consisting of the following five
   components:
 
   \item{diff}{a vector giving the \emph{diff} values corresponding to
@@ -75,29 +75,28 @@ iita(dataset, v)
     \code{v = 2} (corrected), and \code{v = 3} (original).} 
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
-
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
   Schrepp, M. (1999) On the empirical construction of implications
-  between bi-valued test items.  \emph{Mathematical Social Sciences},
+  between bi-valued test items. \emph{Mathematical Social Sciences},
   \bold{38}, 361--375.
 
   Schrepp, M. (2003) A method for the analysis of hierarchical
-  dependencies between items of a questionnaire.  \emph{Methods of
+  dependencies between items of a questionnaire. \emph{Methods of
   Psychological Research}, \bold{19}, 43--79.
 
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision.
+
+ Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication.
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   The function \code{\link{iita}} can be used to perform one of the
@@ -123,7 +122,7 @@ iita(dataset, v)
   analysis; \code{\link{ind_gen}} for inductive generation procedure;
   \code{\link{pop_variance}} for population asymptotic variances of
   \emph{diff} coefficients; \code{\link{variance}} for estimated
-  asymptotic variances of \emph{diff} coefficients;
+  asymptotic variances of \emph{diff} coefficients; \code{\link{z_test}} for one- and two-sample Z-tests; 
   \code{\link{pop_iita}} for population inductive item tree analysis.
   See also \code{\link{DAKS-package}} for general information about
   this package.

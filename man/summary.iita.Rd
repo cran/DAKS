@@ -1,29 +1,32 @@
-\name{print.iita}
-\alias{print.iita}
-\title{Print Method for Objects of Class iita}
+\name{summary.iita}
+\alias{summary.iita}
+\title{Summary Method for Objects of Class iita}
 \description{
-S3 method to print objects of class \code{iita}.
+S3 method to summarize objects of class \code{iita}.
 }
 \usage{
-\method{print}{iita}(x, \dots)
+\method{summary}{iita}(object, \dots)
 }
 \arguments{
-  \item{x}{a required object of class \code{iita}, obtained from a call to the function iita.}
+  \item{object}{a required object of class \code{iita}, obtained from a call to the function \code{\link{iita}}.}
   \item{...}{further arguments to be passed to or from other methods.}
 }
 \details{
-Prints the main results from inductive item tree analysis algorithms.    
+Summarizes the main results from inductive item tree analysis algorithms.    
 }
 \value{
-   If the argument \code{x} is of required type, \code{print.iita} prints the set of implications.}
-
+  If the argument \code{object} is of required type, \code{summary.iita}
+  returns the vector of \emph{diff} values, the quasi order, the error
+  rate, and the index in the selection set of the quasi order with minimum
+  \emph{diff} value.
+}
 \references{
 Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392. 
 
 Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
-  analysis methods in knowledge space theory. Manuscript under revision.
-}  
+  analysis methods in knowledge space theory. Manuscript under revision. 
+}
 \author{
   Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
 

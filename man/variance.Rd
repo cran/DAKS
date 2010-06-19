@@ -54,21 +54,20 @@ variance(dataset, imp, v)
   in \code{dataset}).
 }
 \references{
-  Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
-  Corrections, improvements, and comparisons.  Manuscript under
-  revision.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
+  Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-  Sargin, A. and Uenlue, A. (2009) \pkg{DAKS}: An \R package for data
-  analysis in knowledge space theory. Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. Manuscript under revision. 
 
-  Uenlue, A. and Sargin, A. (2008) Maximum likelihood methodology for
+ Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.  \url{http://www.math.uni-augsburg.de/~uenlueal/}
+  publication. 
 }
 \author{
-  Anatol Sargin \email{anatol.sargin@math.uni-augsburg.de},
-  Ali Uenlue \email{ali.uenlue@math.uni-augsburg.de}
+  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
+
+  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
 }
 \note{
   The current version of the package \pkg{DAKS} does not support
@@ -99,7 +98,7 @@ variance(dataset, imp, v)
   \emph{diff} coefficients; \code{\link{pop_iita}} for population
   inductive item tree analysis; \code{\link{iita}}, the interface that
   provides the three (sample) inductive item tree analysis methods
-  under one umbrella.  See also \code{\link{DAKS-package}} for general
+  under one umbrella; \code{\link{z_test}} for one- and two-sample Z-tests.  See also \code{\link{DAKS-package}} for general
   information about this package.
 }
 \examples{
