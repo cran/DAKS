@@ -1,8 +1,8 @@
 Package: DAKS
 Type: Package
 Title: Data Analysis and Knowledge Spaces
-Version: 2.1-0
-Date: 2010-06-19
+Version: 2.1-1
+Date: 2010-11-13
 Author: Anatol Sargin <sargin@statistik.tu-dortmund.de>, Ali Uenlue
         <uenlue@statistik.tu-dortmund.de>
 Maintainer: Anatol Sargin <sargin@statistik.tu-dortmund.de>, Ali Uenlue
@@ -17,6 +17,6 @@ LazyLoad: yes
 LazyData: yes
 License: GPL (>= 2)
 URL: http://www.statistik.tu-dortmund.de/psysci.html
-Packaged: 2010-06-18 22:58:00 UTC; Uenlue
+Packaged: 2010-11-13 12:04:08 UTC; Uenlue
 Repository: CRAN
-Date/Publication: 2010-06-21 08:03:17
+Date/Publication: 2010-11-13 16:10:07

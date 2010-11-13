@@ -1,0 +1,1523 @@
+\documentclass[nojss]{jss}
+\usepackage{thumbpdf}
+%% need no \usepackage{Sweave.sty}
+
+\author{Ali \"Unl\"u\\University of Dortmund \And 
+        Anatol Sargin\\University of Dortmund}
+\title{\pkg{DAKS}: An \proglang{R} Package for Data Analysis Methods in Knowledge Space Theory}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Ali \"Unl\"u, Anatol Sargin} %% comma-separated
+\Plaintitle{DAKS: An R Package for Data Analysis Methods in Knowledge Space Theory} %% without formatting
+\Shorttitle{\pkg{DAKS}: An \proglang{R} Package for Data Analysis Methods in Knowledge Space Theory} %% a short title (if necessary)
+
+\Abstract{
+This introduction to the \proglang{R} package \pkg{DAKS} is based on the paper by \cite{Uenlue+Sargin:2010}
+published in the \emph{Journal of Statistical Software}.
+     
+Knowledge space theory is part of psychometrics and provides a theoretical framework for the modeling, assessment, and training of knowledge. It utilizes the idea that some pieces of knowledge may imply others, and is based on order and set theory. We introduce the \proglang{R} package \pkg{DAKS} for performing basic and advanced operations in knowledge space theory. This package implements three inductive item tree analysis algorithms for deriving quasi orders from binary data, the original, corrected, and minimized corrected algorithms, in sample as well as population
+quantities. It provides functions for computing population and estimated asymptotic variances of 
+and one and two sample $Z$-tests for the $\mathit{diff}$ fit measures, and for switching between test item and knowledge state representations. Other features are a function for computing 
+response pattern and knowledge state frequencies, a data (based on a finite mixture latent variable
+model) and quasi order simulation tool, and a Hasse diagram drawing device. We describe 
+the functions of the package and demonstrate their usage by real and simulated data examples.
+}
+
+\Keywords{knowledge space theory, psychometrics, exploratory data analysis, maximum likelihood
+asymptotic theory, \proglang{R}}
+\Plainkeywords{knowledge space theory, psychometrics, exploratory data analysis, maximum
+likelihood asymptotic theory, R} %% without formatting
+
+\Address{
+
+  Ali \"Unl\"u\\
+  Statistics in the Social and Educational Sciences\\
+  Faculty of Statistics\\
+  University of Dortmund\\
+  D-44221 Dortmund, Germany\\
+  E-mail: \email{uenlue@statistik.tu-dortmund.de}\\
+  URL: \url{http://www.statistik.tu-dortmund.de/uenlue.html}\\
+
+  Anatol Sargin\\
+  Statistics in the Social and Educational Sciences\\
+  Faculty of Statistics\\
+  University of Dortmund\\
+  D-44221 Dortmund, Germany\\
+  E-mail: \email{sargin@statistik.tu-dortmund.de}\\
+  URL: \url{http://www.statistik.tu-dortmund.de/sargin1.html}
+  
+}
+
+\begin{document}
+
+
+
+% \VignetteIndexEntry{DAKS: An R Package for Data Analysis Methods in Knowledge Space Theory}
+% \VignetteDepends{DAKS, relations, sets}
+% \VignetteKeywords{knowledge space theory, inductive item tree analysis, DAKS, psychometric computing, R}
+% \VignettePackage{DAKS}
+
+
+\section{Introduction}
+\label{Intro}
+
+More than $50$ years ago, Louis Guttman introduced his scalogram technique 
+\citep{Guttm:44}. 
+The deterministic scalogram technique allows for linear orderings of persons 
+(e.g., regarding their abilities) and items (e.g., regarding their difficulties).
+Since then, the Guttman model has been generalized in at least two directions.
+On the one hand, in a probabilistic and statistical direction, 
+based on the \cite{Rasch:60} model and generalized 
+by \cite{Mokk:71}'s monotone homogeneity model, a family of linear probabilistic models 
+\citep[item response theory, IRT; e.g.,][]{LindHamb:97}
+has emerged, retaining the linearity of person and item orderings. 
+On the other hand, in a deterministic and order-theoretic direction, 
+starting with \cite{AirBart:73} and \cite{BartKrus:73}, 
+a family of nonlinear deterministic models 
+\citep[knowledge space theory, KST; e.g.,][see Section \ref{KST}]{DF:85}
+has been developed, 
+weakening the linearity of person and item orderings to allow for incomparabilities 
+among persons and items.
+In KST, persons are represented by collections of items of a domain they
+are capable of mastering.\footnote{Throughout this paper, mastery 
+of an item stands for a subject's true, unobservable knowledge of the solution to the item 
+(latent level); solving an item stands for the observed response of a subject to the item 
+(manifest level).} 
+Persons can be incomparable with respect to set-inclusion. 
+Items, in turn, are assumed to be ordered, for instance, 
+with respect to a hierarchy of mastery dependencies. 
+Items can be incomparable with respect to that hierarchy. 
+In IRT, on the other hand, persons and items are, for
+instance, represented by single real numbers, ability and difficulty parameters,
+respectively. Persons and items are linearly ordered with respect
+to the natural ordering of the real numbers. Conceptually speaking, KST
+may be viewed as a more `qualitative, behavioral' approach, unlike IRT, as a
+`quantitative, statistical' approach. 
+
+KST and IRT are split directions of psychological test theories, and there is 
+a major interest in trying to conflate these test theories. 
+What one ideally would like to have is a unified framework 
+keeping the strengths and at the same time avoiding the drawbacks of both theories.
+In Section \ref{Conc}, we describe what the KST models can do that the IRT 
+models cannot do, and vice versa \citep[cf.][]{U:07}. 
+KST and IRT have been partly compared at a theoretical level \citep{S:06,SR:09,U:06,U:07}. 
+Using the \proglang{R} \citep{R:10} 
+language and environment for statistical computing and graphics as an interface between these theories may prove valuable in comparing them at a computational level. 
+\proglang{R} gives users the possibility to include own software packages 
+for handling specific tasks. There are a number of \proglang{R} packages available 
+for IRT; for instance, \pkg{ltm} \citep{ltm} or \pkg{mokken} \citep{mokken}. But there aren't 
+for KST, and the present \proglang{R} package \pkg{DAKS} aims at providing a basis 
+for computational work in the so far combinatorial theory of 
+knowledge spaces. Implementing KST procedures in \proglang{R} can help to bring together 
+KST and IRT.
+
+KST was introduced by \cite{DF:85}. Most of the theory is presented in a monograph by \cite{DF:99}; 
+for applications see \cite{AL:99}, and for survey articles see \cite{DF:87}, \cite{F:89b}, and \cite{FKVDJ:90}. A comprehensive bibliography on KST, including many references 
+on empirical applications of KST, by C.\ Hockemeyer (University of Graz, Austria) can be 
+retrieved from \url{http://wundt.kfunigraz.ac.at/kst.php}.
+KST provides a theoretical framework for the modeling, assessment, and training of knowledge. 
+This theory utilizes the idea that some pieces of knowledge may imply others. For instance, the mastery of a test question may imply the mastery of other test questions.
+Implications between pieces of knowledge are modeled in KST by order and set theoretic structures. Based on such a framework, KST has been successfully applied for computerized adaptive assessment and training; for example, see the ALEKS system (\url{http://www.aleks.com/}), a Web-based, artificially intelligent assessment and learning system. 
+
+However, KST models can only be successfully applied if the latent implications underlying the 
+items are sufficiently known. Therefore a crucial problem in KST is the empirical derivation 
+of the implications between items using the data.
+Three inductive item tree analysis (IITA) algorithms have been proposed for deriving implications from dichotomous data: the original IITA algorithm \citep{Schrepp:03}, and the corrected and minimized corrected IITA algorithms \citep{SU:09, US:10}. These methods constitute the main part of the
+package \pkg{DAKS} and are implemented in sample and population quantities.
+Besides the three IITA algorithms, the package \pkg{DAKS} also provides functions for computing
+population and estimated asymptotic variances of and one and two sample $Z$-tests for the fit
+measures, and for switching between test item and knowledge state representations. Other features are a function for computing response pattern and knowledge state frequencies, a data and quasi
+order simulation tool, and a Hasse diagram (see Footnote \ref{footnote:hasse}) drawing device.
+
+Currently available software implementing the original IITA algorithm is \pkg{ITA 2.0} by \cite{Schrepp:06}. Compared to this stand-alone software that runs only on \proglang{Windows}, 
+the package \pkg{DAKS} is embedded in the comprehensive \proglang{R} computing environment 
+and provides much more functionalities such as more flexible input/output features. In particular,
+the corrected and minimized corrected IITA algorithms are only implemented 
+in the package \pkg{DAKS}.
+
+In Section \ref{KST}, the basic deterministic and probabilistic concepts of KST and the three IITA algorithms are reviewed. In Section \ref{DAKS}, the package \pkg{DAKS} is presented and its functions are explained. In Section \ref{Demo}, the package \pkg{DAKS} is demonstrated using real and simulated data. In Section \ref{Conc}, we conclude with a summary, some suggestions 
+for future implementations of the package, and general remarks 
+about the interplay between KST and IRT.
+
+%% Note: If there is markup in \(sub)section, then it has to be escape as above.
+\section{Knowledge space theory and data analysis methods}
+\label{KST}
+
+We briefly recapitulate the basic concepts of KST relevant for this work and the three IITA algorithms. Details can be found in the 
+respective references afore mentioned.
+
+\subsection{Basic concepts of knowledge space theory}
+\label{subsec:KST}
+
+Assume a set $Q$ of $m$ dichotomous items. Mastering an item $j \in Q$ 
+may imply mastering another item $i \in Q$. If no response errors are made, these implications, 
+$j \rightarrow i$, entail that only certain response patterns (represented by subsets of $Q$) are possible. Those response patterns are called knowledge states, 
+and the set of all knowledge states (including $\emptyset$ and $Q$) is called a knowledge structure, and denoted by $\mathcal{K}$. The knowledge structure
+$\mathcal{K}$ is a subset of $2^Q$, the power set of $Q$.
+Implications are assumed to form a quasi order, that is, a reflexive, transitive binary relation, $\sqsubseteq$ on the item set $Q$. 
+In other words, an implication $j\rightarrow i$ stands for the pair $(i,j)\in \,\,\sqsubseteq$, also denoted by $i\sqsubseteq j$. 
+Quasi orders are referred to as surmise relations in KST. 
+Theoretically, a surmise relation
+can even consist of only the reflexive item pairs. No item then implies another, and any 
+response pattern is consistent with the surmise relation. The IITA algorithms do cover this case as well, because this is a special type of surmise relation. Practically, however, having no implications between, for a specific purpose, reasonably constructed items is virtually impossible. 
+In general, items measure some common latent traits and so they do correlate to some degree.
+Moreover, the special case of a chain hierarchy (see Footnote \ref{footnote:chain}) among the test
+items is covered by the IITA procedures as well.
+
+A possible application is an aptitude test, where participants can solve (coded $1$) or fail to solve (coded $0$) a question. 
+In this paper, the latter interpretation is used to illustrate the IITA algorithms.
+
+Implications are latent and not directly observable, due to random response errors. A person who is actually unable to solve an item, but does so, makes a lucky guess. On the other hand, a person makes a careless error, if he fails to solve an item which he masters. A probabilistic extension of the knowledge structure model covering random response errors is the basic local independence model.\footnote{\label{foot:blim}The basic local independence model is assumed to hold 
+throughout this paper.
+In Section \ref{subsec:simu}, we use that probability model with prespecified/known parameter values for simulating the data. Based on the simulated data, we can check and compare the IITA algorithms. In particular, we do not estimate the latent parameters (probabilities) of
+and assess model fit for the basic local independence model. The focus and advantage of 
+the exploratory IITA methods lies in the data-analytic derivation of a knowledge structure 
+solely based on the manifest parameters (probabilities) of the multinomial sampling distribution 
+for the data. The multinomial distribution is the true saturated model, and its parameters
+can easily be estimated using the corresponding sample analogs.}
+
+\subsubsection{Basic local independence model}
+
+A quadruple $(Q,\mathcal{K},p,r)$ is called a basic local independence model (BLIM) if and only if 
+\begin{enumerate}
+\item $(Q,\mathcal{K})$ is a knowledge structure, 
+\item $p$ is a probability distribution on $\mathcal{K}$, that is, $p:\mathcal{K}\to \,\,]0,1[ \, ,K\mapsto p(K)$, with $p(K)> 0$ for any $K\in\mathcal{K}$, and $\sum_{K\in\mathcal{K}} p(K)=1$,
+\item $r$ is a response function for $(Q,\mathcal{K},p)$, that is, $r:2^Q\times \mathcal{K}\to [0,1]$, $(R,K)\mapsto r(R,K)$, with $r(R,K)\geq 0$ for any $R\in 2^Q$ and $K\in \mathcal{K}$, and $\sum_{R\in 2^Q} r(R,K)=1$ for any $K\in \mathcal{K}$,
+\item $r$ satisfies local independence, that is,
+\begin{displaymath}
+r(R,K) = \prod_{q\in K\setminus R}\beta_q \cdot \prod_{q\in K\cap R} (1-\beta_q) \cdot \prod_{q\in R\setminus K}\eta_q \cdot \prod_{q\in Q\setminus(R\cup K)} (1-\eta_q),
+\end{displaymath}
+with two constants $\beta_q,\eta_q\in [0,1[$ for each $q\in Q$, respectively called careless error and lucky guess probabilities at $q$.
+\end{enumerate}
+Here, $K\setminus R:=\{q\in Q: q\in K \,\,\mbox{and}\,\, q\not\in R\}$,
+$K\cap R:=\{q\in Q: q\in K \,\,\mbox{and}\,\, q\in R\}$, 
+$R\setminus K:=\{q\in Q: q\in R \,\,\mbox{and}\,\, q\not\in K\}$, and 
+$Q\setminus (R\cup K):=\{q\in Q: q\not\in R \,\,\mbox{and}\,\, q\not\in K\}$. 
+The items in $K\setminus R$, $K\cap R$, $R\setminus K$, and 
+$Q\setminus (R\cup K)$ are mastered but not solved (careless error), 
+mastered and solved (no careless error), solved but not mastered (lucky guess),
+and not solved and not mastered (no lucky guess), respectively.
+
+Let $n$ be the sample size. The data are the observed absolute counts of response patterns $R\subset Q$.
+Let $D$ denote the corresponding $n\times m$ data matrix of $0$/$1$ item scores.
+The data are assumed to be multinomially distributed over $2^Q$. Let $\rho(R)$ denote the 
+(unknown) true probability of occurrence of a response pattern $R$.
+The BLIM is based on the following assumptions. To each knowledge state $K\in\mathcal{K}$ 
+is attached a probability $p(K)$ measuring the likelihood that a respondent is in state $K$.
+For a manifest response pattern $R\subset Q$ and a latent knowledge state $K\in\mathcal{K}$, 
+$r(R,K)$ specifies the conditional probability of response pattern $R$ for a respondent in state $K$. 
+The item responses of a respondent are assumed to be independent 
+given the knowledge state of the respondent (local independence). The response error, that is, 
+careless error and lucky guess, probabilities $\beta_q$ and $\eta_q$ are attached to the items 
+and do not vary with the knowledge states. 
+
+The BLIM allows expressing the occurrence probabilities $\rho(R)$ of response patterns $R$ by means of the model parameters
+$p(K)$ and $\beta_q, \eta_q$:
+\[
+\rho(R) = \sum_{K\in\mathcal{K}}
+\left\{
+\left[\prod_{q\in K\setminus R}\beta_q\right]
+\cdot
+\left[\prod_{q\in K\cap R}(1-\beta_q)\right] 
+\cdot
+\left[\prod_{q\in R\setminus K}\eta_q\right]
+\cdot
+\left[\prod_{q\in Q\setminus(R\cup K)} (1-\eta_q)\right]
+\right\} p(K).
+\]
+
+\subsubsection{Remarks regarding the basic local independence model}
+
+The BLIM is fundamental in KST, in the sense that most of the KST probabilistic models are 
+special cases of this model \citep{DF:99}. 
+Viewing the knowledge states as the latent classes, the BLIM 
+can be seen as a constrained latent class model with $|\mathcal{K}|$ latent classes 
+($|\mathcal{K}|$, the size of $\mathcal{K}$)
+and two conditional response probabilities per test item. 
+It is important to note that the latent classes $K\in \mathcal{K}$ possess an inner structure 
+composed of the indicators, which determines the constraints imposed on the conditional 
+class probabilities. 
+The idea expressed in the definition of the BLIM is not a new one and goes back to traditional 
+latent class measurement or scaling models such as the \cite{Proc:70} model, the \cite{DayMac:76} 
+intrusion--omission model, and more generally, the \cite{LazHen:68} latent distance model. 
+They originated as probabilistic generalizations of the deterministic, linear \cite{Guttm:44} model. 
+The BLIM is a de-linearized latent distance model. De-linearized here means that the knowledge
+structure $\mathcal{K}$ is not necessarily linearly ordered with respect to set-inclusion
+(cf.\ Footnote \ref{footnote:chain}), as is the case for the traditional latent class scaling models. 
+For a description of the relationships of these models, and more generally, for a description of 
+the connection between KST and latent class analysis (including inference methodologies), 
+see \cite{U:10} \citep[cf.\ also][]{S:05}.
+
+The BLIM is a restricted latent class model and the most general model used in KST. 
+The dynamic, based on stochastic processes, KST stochastic learning paths systems 
+are special cases of the BLIM \citep{DF:99,F:89a, FKVDJ:90}. 
+They are obtained by further restricting, besides combinatorial constraints on the knowledge structure, the state/class probabilities of the BLIM based on postulated learning mechanisms describing successive transitions of subjects, over time, from the state $\emptyset$
+to the state $Q$. The models considered in \cite{S:05} and \cite{SR:09} are the BLIM with the error 
+parameters being a priori restricted to sub-intervals of the unit interval. In the current version of 
+the package \pkg{DAKS}, these special cases of the BLIM are not supported and represent 
+useful features that may be added in future improvements of the package.
+
+The number of independent parameters of the BLIM is $2|Q|+(|\mathcal{K}|-1)$. Since $|\mathcal{K}|$ generally tends to be prohibitively large in practice, parameter estimation and model testing based on classical maximum likelihood methodology are not feasible in general 
+\citep[for details, see][]{U:06, U:07}. 
+For instance, in an experiment by \cite{Kamb:91} \citep[see also][]{KKVF:94}, 
+reviewed in \cite{DF:99},
+the number of knowledge states ranges from several hundreds to several thousands 
+(for $50$ items). 
+In such cases, without any restrictions, it may be infeasible to obtain reliable estimates of the 
+several hundreds to several thousands of model parameters, given a specific knowledge structure.
+This is why exploratory methods such as the IITA algorithms are important in KST. Exploratory methods can be applied without having to estimate the latent parameters of and assess model fit 
+for the BLIM (cf.\ also Footnote \ref{foot:blim}).
+
+\subsubsection{Birkhoff's theorem}
+\label{subsubsec:birk}
+
+A knowledge structure closed under union and intersection is called a quasi ordinal knowledge space. Quasi ordinal knowledge spaces and surmise relations are equivalent formulations. According to \cite{B:37}'s theorem, there exists a one-to-one correspondence between the collection of all quasi ordinal knowledge spaces $\mathcal{K}$ on a domain $Q$, and the collection of all surmise relations $\sqsubseteq$ on $Q$. Such a correspondence is defined through the two equivalences:
+\begin{eqnarray*}
+p\sqsubseteq q  
+\,\,\,\,&:\Longleftrightarrow & \,\,\,\,
+\left[\forall K\in \mathcal{K}: \left\{q\in K\Longrightarrow p\in K\right\}\right], \\
+K\in \mathcal{K} 
+\,\,\,\,&:\Longleftrightarrow & \,\,\,\,
+\left[\forall (p\sqsubseteq q): \left\{q\in K\Longrightarrow p\in K\right\}\right].
+\end{eqnarray*} 
+This theorem is important from a practical point of view. Though the quasi ordinal knowledge space and surmise
+relation models are empirically interpreted at the different levels of persons and items, they are connected with each other mathematically, through Birkhoff's theorem. This theorem is realized in the package \pkg{DAKS} using two functions for switching between test item and knowledge state representations (see Section \ref{fun}). 
+
+\subsection{Inductive item tree analysis algorithms}
+\label{subsec:IITA}
+
+The functions of the package \pkg{DAKS} realizing the IITA algorithms in sample and population quantities are described in Section \ref{fun}. Their usage by real and simulated data examples is demonstrated in Section \ref{Demo}.
+
+\subsubsection{Inductive item tree analysis algorithms in sample values}
+
+The three IITA algorithms are exploratory methods for extracting surmise relations from data. In each algorithm, competing binary relations are generated, and a fit measure is computed for every relation in order to find the quasi order that fits the data best. 
+In the following, the methods are briefly reviewed.
+
+\paragraph{\it Algorithms.}
+For the original IITA version \citep{Schrepp:03} the algorithm is: 
+\begin{enumerate}
+\item 
+For two items $i, j$, the value $b_{ij} := |\{R \in D| i\not\in R \wedge j\in R\}|$ is the number of counterexamples, that is, the number of observed response patterns in the data matrix $D$ contradicting $j \rightarrow i$. Based on these values, binary relations $\sqsubseteq_{_L}$ for 
+$L = 0, \ldots, n$ are defined as follows.
+\begin{enumerate} 
+\item[1a.] 
+Let $i \sqsubseteq_{_0} j : \Leftrightarrow b_{ij} = 0$. The relation $\sqsubseteq_{_0}$ is  a quasi order. 
+\item[1b.] 
+Construct inductively:
+Assume $\sqsubseteq_{_L}$ is transitive. Define the set $S_{L+1}^{(0)}:=\{(i,j)| b_{ij} \leq L +1 
+\wedge i \not\sqsubseteq_{_L} \!j \}$. 
+This set consists of all item pairs that are not already contained in the relation $\sqsubseteq_{_L}$ and have at most $L+1$ counterexamples.
+From $S_{L+1}^{(0)}$, exclude those item pairs that cause an intransitivity in 
+$\sqsubseteq_{_L} \! \!\cup \,S_{L+1}^{(0)}$;
+the remaining item pairs (of ${S}_{L+1}^{(0)}$) are referred to as ${S}_{L+1}^{(1)}$. 
+Then, from the item pairs in ${S}_{L+1}^{(1)}$, those are excluded that cause an intransitivity 
+in $\sqsubseteq_{_L} \! \!\cup \,{S}_{L+1}^{(1)}$, and the remaining item pairs 
+(of ${S}_{L+1}^{(1)}$) are referred to as ${S}_{L+1}^{(2)}$.
+This process continues iteratively, say $k$ times, until no intransitivity is caused. 
+\item[1c.] 
+The generated relation 
+$\sqsubseteq_{_{L+1}}:= \, \sqsubseteq_{_L}\!\! \cup \, {S}_{L+1}^{(k)}$ is a quasi order by construction. Hence $\sqsubseteq_{_L}$ for $L=0, \ldots, n$ are quasi orders. 
+They constitute the selection set of the IITA procedure.
+\end{enumerate}
+\item 
+The coefficient $\mathit{diff_o}(\sqsubseteq_{_L}, D)$ is used to assess the fit of each quasi order 
+$\sqsubseteq_{_L}$ to the binary data matrix $D$ (see below).
+\item 
+Choose the quasi order with minimum $\mathit{diff_o}(\sqsubseteq_{_L}, D)$ value.
+\end{enumerate}
+
+For the corrected and minimized corrected IITA versions \citep{SU:09} the algorithms are:
+\begin{enumerate}
+\item The generation of the selection set of quasi orders is the same as in the original IITA version.
+\item The coefficients $\mathit{diff_c}(\sqsubseteq_{_L}, D)$ and $\mathit{diff_{mc}}(\sqsubseteq_{_L}, D)$ are 
+used to assess the fit of each quasi order $\sqsubseteq_{_L}$ to the binary data matrix $D$ (see below), respectively.
+\item Choose the quasi orders with minimum $\mathit{diff_c}(\sqsubseteq_{_L}, D)$ and 
+$\mathit{diff_{mc}}(\sqsubseteq_{_L}, D)$ values, respectively.
+\end{enumerate}
+
+\paragraph{\it Fit measures.}
+The $\mathit{diff}$ fit measures $\mathit{diff_o}$,  $\mathit{diff_c}$, and  $\mathit{diff_{mc}}$ 
+are defined by
+\begin{displaymath}
+\mathit{diff} (\sqsubseteq, D) = \frac{1}{m(m-1)}\sum_{i \not= j} (b_{ij} - b^*_{ij})^2,
+\end{displaymath}
+where corresponding estimates $b^*_{ij}$ are used, varying from algorithm to algorithm.
+We describe the computation of these estimates.
+The estimates $b^*_{ij}$ are obtained based on a single error probability.
+
+In the original IITA version this single error rate is given by
+\[
+\gamma_{_\sqsubseteq}=\frac{1}{|\!\sqsubseteq\!| - m}\sum\limits_{i \sqsubseteq j, i \not= j} \frac{b_{ij}}{p_{j} n}.
+\]
+If $(i,j)\in \,\,\sqsubseteq$, 
+the expected number of counterexamples is estimated by 
+$b^*_{ij} = \gamma_{_\sqsubseteq} p_j n$. 
+If $(i,j)\not \in \,\,\sqsubseteq$, no dependency between the two items is assumed, 
+and the estimate $b^*_{ij} = (1-p_i) p_j n (1-\gamma_{_\sqsubseteq})$ is used. 
+In this formula, $(1-p_i) p_j n$ is the usual probability for two independent items, 
+and the factor $1-\gamma_{_\sqsubseteq}$ is assumed to state that no random error occurred. 
+As discussed in \cite{SU:09}, the main criticism on the original algorithm is on the used 
+estimates $b^*_{ij}$. 
+
+In \cite{SU:09}, it is shown that this estimation scheme leads to 
+methodological inconsistencies, and corrected estimators avoiding the inconsistencies 
+of the original algorithm are proposed.
+Two problems arise in the calculation of the estimates of the original
+algorithm. For $(i,j) \not\in \,\, \sqsubseteq$, the estimate used in the original algorithm 
+is $b^*_{ij} = (1-p_i) p_j n (1-\gamma_{_\sqsubseteq})$. But the original algorithm does not 
+take two different cases into account, namely $(j,i) \not\in \,\, \sqsubseteq$ 
+and $(j,i) \in \,\, \sqsubseteq$. In the first case, independence holds, 
+and a corrected estimator is $b^*_{ij} = (1-p_i) p_j n$. 
+In the second case, independence cannot be assumed, as $j \sqsubseteq i$. 
+A corrected estimator $b^*_{ij}$ in this case is $(p_j - p_i + \gamma_{_\sqsubseteq}p_i) n$
+\citep[see][]{SU:09}, instead of $(1-p_i) p_j n (1-\gamma_{_\sqsubseteq})$.
+
+In the corrected IITA version 
+the same $\gamma_{_\sqsubseteq}$ and $b^*_{ij} = \gamma_{_\sqsubseteq} p_j n$ for 
+$(i,j) \in \,\,\sqsubseteq$ are used.
+The choice for $b^*_{ij}$ in the case of $(i,j) \not \in \,\,\sqsubseteq$ now depends 
+on whether $(j,i) \not \in \,\,\sqsubseteq$ or $(j,i) \in \,\,\sqsubseteq$.
+If $(i,j) \not \in \,\,\sqsubseteq$ and $(j,i) \not \in \,\,\sqsubseteq$, set $b^*_{ij} = (1-p_i)p_j n$. 
+If $(i,j) \not \in \,\,\sqsubseteq$ and $(j,i) \in \,\,\sqsubseteq$, 
+set $b^*_{ij} = (p_j - p_i + \gamma_{_\sqsubseteq}p_i) n$.
+
+In the minimized corrected IITA version the corrected estimators $b^*_{ij}$ as in the $\mathit{diff_c}$ coefficient are used. 
+Minimizing the $\mathit{diff}$ expression as a function of the error probability $\gamma_{_\sqsubseteq}$
+gives $\gamma_{_\sqsubseteq} = -\frac{x_1 + x_2}{ x_3 + x_4}$, where
+\begin{eqnarray*}
+x_1 &=& \sum_{i \not \sqsubseteq j \; \wedge \; j \sqsubseteq i} -2b_{ij}p_i n + 2p_ip_j n^2 - 2p^2_i n^2, \\
+x_2 &=& \sum_{i \sqsubseteq j} -2b_{ij}p_j n, \\
+x_3 &=& \sum_{i \not \sqsubseteq j  \; \wedge \; j \sqsubseteq i} 2p^2_i n^2, \\
+x_4 &=& \sum_{i \sqsubseteq j} 2 p^2_j n^2\\
+\end{eqnarray*}
+\citep[for details, see][]{SU:09}. This error probability can now be used for an alternative IITA procedure, in which a minimized $\mathit{diff}$ value is computed for every quasi order.
+The idea underlying the minimized corrected IITA version is to use the corrected estimators 
+and to optimize the fit criterion. The fit measure then favors quasi orders that lead to smallest minimum discrepancies, or equivalently, largest maximum matches, between the observed and expected numbers of counterexamples. 
+
+\paragraph{\it General remarks.}
+Mathematical considerations and comparisons based on simulated and real data examples 
+reported by \cite{SU:09} and \cite{US:10} based on sample and population values, respectively, suggest using the minimized corrected IITA version as the prior choice. 
+For instance, in the extensive simulation studies in \cite{SU:09} and \cite{US:10}, 
+overall the minimized corrected IITA algorithm performs best, second comes the corrected IITA algorithm, and worst is the original IITA algorithm, with respect to all of the considered summary statistics. The summary statistics according to which the IITA algorithms have been compared are, 
+for example, the sample
+and population symmetric differences at the levels of items and knowledge states, and 
+the ranks of the underlying quasi orders in the ordered lists of population $\mathit{diff}$ values. 
+Moreover, similar results are obtained for the corrected and minimized corrected algorithms, 
+with a slight advantage for the latter. For each of the considered summary statistics, 
+the original IITA algorithm shows considerably bad results for larger error probabilities.
+The original IITA algorithm should only be used specifically for datasets with very few 
+underlying knowledge states and when the error rates are very low.
+See also the ``General remarks'' in ``IITA analyses of the PISA data'' 
+of Section \ref{subsec:pisa_appl}.
+
+\subsubsection{Inductive item tree analysis algorithms in population values}
+\label{subsec:population_iita}
+
+In \cite{US:10}, we introduce the population analogs of the $\mathit{diff}$ fit measures, 
+interpret the coefficients as maximum likelihood estimators (MLEs) 
+for the corresponding population values, and show for the estimators the quality properties
+of asymptotic efficiency, asymptotic normality, asymptotic unbiasedness, 
+and consistency. This is briefly reviewed next.
+
+\paragraph{\it Cautionary notes.}
+Why do we need population variants of the $\mathit{diff}$ coefficients? 
+What is the BLIM for? What is the connection between the fit of a quasi order 
+to the data assessed in terms of the $\mathit{diff}$ coefficients on the one hand
+and the BLIM and parameters $\rho(R)$ on the other? 
+
+The original, corrected, and minimized corrected IITA algorithms with their 
+respective $\mathit{diff}$ fit measures have been proposed for building quasi orders 
+from dichotomous data. So far, they have been treated descriptively, without 
+examining a theory that may underlie these procedures. A statistical theory, however, 
+requires a population based approach. Theoretical considerations in population quantities
+are important. Supposing the population completely to be known is the way to begin 
+with in constructing sound fit measures for quasi orders. After having provided justification 
+for a measure in a known population, one has to consider sampling problems 
+concerning estimation and testing \citep{GK:79}. For instance, based on the package 
+\pkg{DAKS} (see Section \ref{fun}) we now can perform an approximate significance test 
+to test whether the population $\mathit{diff}$ value for one quasi order 
+is greater than the population value obtained for another, which is the crucial hypothesis 
+to be tested when choosing among competing quasi orders. 
+Literature on the IITA algorithms has dealt with samples rather than a  
+population. For a purely descriptive approach, however, statistical 
+estimation and testing do not make sense.
+
+The BLIM is a fairly general and realistic probability model, which explains the responses 
+to test items of individuals in certain knowledge states. It is \textit{the} probabilistic generalization 
+of the knowledge structure model that is used in KST. A knowledge structure, more precisely 
+a quasi ordinal knowledge space, corresponds to a surmise relation (cf.\ Birkhoff's theorem). 
+In this sense, the BLIM is a fairly realistic probabilistic generalization of the surmise relation model,
+which takes into account deviations from the latent true implications between the items 
+according to random response errors (careless errors and lucky guesses). 
+Therefore the BLIM is the probability model assumed to hold throughout this paper.
+
+As mentioned in Section \ref{subsec:KST}, the advantage of the exploratory IITA methods 
+and the $\mathit{diff}$ coefficients lies in their computation, which is solely based on the manifest
+probabilities of the multinomial sampling distribution for the data. The population $\mathit{diff}$ coefficients are functions of the multinomial cell probabilities $\rho(R)$ ($R\subset Q$)
+(see below). These probabilities can easily be estimated using the corresponding 
+sample analogs. In this way, one avoids having to estimate the latent parameters of the BLIM, 
+which is not feasible in general (Section \ref{subsec:KST}).
+This is the reason why exploratory methods such as the IITA algorithms are important in KST.
+Although they are only indirectly related to the latent parameters of the BLIM---they are 
+exploratory procedures operating on the manifest probabilities $\rho(R)$, and theoretically at least,
+they can be computed under any model for $\rho(R)$---the IITA methods provide good results 
+when applied to response data arising from such a realistic response model as the BLIM 
+and hence represent a different approach to solving the problem of deriving a knowledge 
+structure data-analytically \citep[for details, see][]{SU:09,US:10}.
+
+The occurrence probabilities $\rho(R)$ of response patterns $R\subset Q$ provide the connection
+between the BLIM and the $\mathit{diff}$ coefficients. The BLIM expresses the occurrence probabilities $\rho(R)$ by means of the model parameters $p(K)$ ($K\in \mathcal{K}$) and
+$\beta_q, \eta_q$ ($q\in Q$). Having specified the parameters of the BLIM as the data generating
+model in simulations, as a consequence the probabilities $\rho(R)$ ($R\subset Q$) are determined 
+as well. By calculating the $\mathit{diff}$ coefficients based on these true values we obtain the
+population values of the coefficients.
+
+\paragraph{\it Population coefficients.}
+Consider the transformed sample $\mathit{diff}$ coefficients $\mathit{diff} := \mathit{diff}/n^2$. 
+The division is necessary to cancel out sample size $n$ in replacements of sample quantities with population quantities. Given the multinomial probability distribution on the set of all response
+patterns (see Section \ref{subsec:KST}), make the following replacements in the arguments, 
+$b_{ij}$ and $p_i$, of the sample $\mathit{diff}$ coefficients:
+\begin{eqnarray*}
+\frac{b_{ij}}{n} &\rightarrow & P(i = 0, j = 1) = \sum_{R \in 2^Q, i\not \in R \; \wedge \; j \in R} \rho(R), \\
+p_i &\rightarrow & P(i=1) =\sum_{R \in 2^Q, i \in R} \rho(R).
+\end{eqnarray*}
+This gives three population $\mathit{diff}$ coefficients corresponding to the sample $\mathit{diff}$ coefficients. 
+The population $\mathit{diff}$ coefficients are functions of the cell
+probabilities $\rho(R)$ ($R\subset Q$) of the multinomial distribution.
+
+The formulations of the population $\mathit{diff}$ coefficients are straightforward. We have 
+\begin{displaymath}
+\mathit{diff} (\sqsubseteq, \{\rho(R)\}_{R\in 2^Q}) = 
+\frac{1}{m(m-1)}\sum_{i \not= j} (P(i = 0, j = 1) - P^*(i = 0, j = 1))^2,
+\end{displaymath}
+where corresponding theoretical probabilities $P^*(i = 0, j = 1)$ are used, 
+varying from algorithm to algorithm. In the population corrected IITA version, for instance, 
+the population error rate is given by 
+\[
+\gamma_{_\sqsubseteq}=\frac{1}{|\!\sqsubseteq\!| - m}\sum\limits_{i \sqsubseteq j, i \not= j} \frac{P(i = 0, j = 1)}{P(j=1)},
+\]
+and if $(i,j)\in \,\,\sqsubseteq$ for example, the theoretical probability is 
+$P^*(i=0,j=1) = \gamma_{_\sqsubseteq} P(j=1)$.
+As defined above, $P(i = 0, j = 1) = \sum_{R \in 2^Q, i\not \in R \; \wedge \; j \in R} \rho(R)$
+and $P(j=1) =\sum_{R \in 2^Q, j \in R} \rho(R)$.
+
+Since the BLIM expresses the cell probabilities $\rho(R)$ by means of the model parameters,
+having specified the parameters of the BLIM, these probabilities are also determined.
+The population values of the $\mathit{diff}$ coefficients are based on these 
+true values.
+
+\paragraph{\it Maximum likelihood estimators.}
+The sample $\mathit{diff}$ coefficients, as defined in sample values before,
+\begin{displaymath}
+\mathit{diff} (\sqsubseteq, D) = \frac{1}{m(m-1)}\sum_{i \not= j} (b_{ij} - b^*_{ij})^2
+\end{displaymath}
+are the obvious sample analogs of these population fit measures. They are reobtained by replacing
+the arguments $\rho(R)$ of the population $\mathit{diff}$ measures with the MLEs $n(R)/n$ of the multinomial distribution, where $n(R)$ 
+are the absolute counts of response patterns $R\in 2^Q$. That is, the sample $\mathit{diff}$ coefficients are equal to the respective population $\mathit{diff}$ coefficients evaluated at the 
+MLEs $n(R)/n$. Therefore, according to the invariance property of MLEs \citep[e.g.,][]{CB:02}, 
+the sample $\mathit{diff}$ coefficients (as defined in sample values before) are the MLEs for 
+the corresponding population $\mathit{diff}$ coefficients. 
+
+\paragraph{\it Asymptotic properties.}
+The MLE for the multinomial distribution fulfills required regularity conditions and 
+is asymptotically efficient \citep[e.g.,][]{CB:02}. 
+The population $\mathit{diff}$ coefficients are differentiable functions of the multinomial cell probabilities $\rho(R)$; therefore the sample $\mathit{diff}$ coefficients 
+are asymptotically efficient, asymptotically normal, asymptotically unbiased, and consistent estimators for the population values \citep[][]{US:10}.
+
+\section[Implementation in the package DAKS]{Implementation in the package \pkg{DAKS}}
+\label{DAKS}
+
+In this section, we describe how surmise relations and knowledge structures are implemented,  
+and discuss the functions of this package. 
+
+\subsection[Surmise relations and knowledge structures in DAKS]{Surmise relations and knowledge structures in \pkg{DAKS}} 
+\label{subsec:sr}
+
+A quasi order is a set of tuples, where each tuple is a pair $(i,j)$ representing the implication $j \rightarrow i$. This is implemented in \pkg{DAKS} using the package \pkg{sets} \citep{sets}. The latter, in combination with the package \pkg{relations} \citep{rel}, are utilized in \pkg{DAKS}, because they provide useful functions for operating with surmise relations and knowledge structures. The following \proglang{R} output shows an example quasi order:
+\begin{Code}
+{(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)}
+\end{Code}
+or
+\begin{Code}
+{(1L, 2L), (1L, 3L), (1L, 4L), (2L, 3L), (2L, 4L), (3L, 4L)}
+\end{Code}
+This code is to be read: item $1$ is implied by items $2$, $3$, and $4$, item $2$ is implied by items $3$ and $4$, and item $3$ is implied by item $4$. 
+This gives the chain $4 \rightarrow 3  \rightarrow2  \rightarrow 1$.\footnote{\label{footnote:chain}A
+chain or linearly ordered set is any partially ordered set (reflexive, transitive, and antisymmetric 
+binary relation) $(P,\mathcal{P})$ satisfying the property of ``linearity,'' that is, 
+for all $p_1,p_2\in P$, $p_1\mathcal{P}p_2$ or $p_2\mathcal{P}p_1$.} 
+Note that in the second code line an item $i$ is represented by $iL$. This transformation 
+takes place internally in the packages \pkg{sets} or \pkg{relations}, but it does not have any influence. 
+Both representations are equal \citep[see pp.\ 306--307 in][for how \proglang{R} parses numeric constants]{R:10}:
+\begin{Schunk}
+\begin{Sinput}
+R> 1 == 1L
+\end{Sinput}
+\begin{Soutput}
+[1] TRUE
+\end{Soutput}
+\end{Schunk}
+
+Note that reflexive pairs are not shown in order to reveal implications between different items only, and to save computing time. 
+Surmise relations always contain all reflexive pairs, and these are included whenever required by the package \pkg{DAKS}.  
+
+A knowledge structure is implemented as a binary matrix, where rows and columns stand for knowledge states and items, respectively. Each entry of the matrix, $1$ or $0$, represents mastering or not mastering an item in a corresponding state. The following \proglang{R} output shows the knowledge structure corresponding to the above quasi order:
+\begin{Code}
+     [,1] [,2] [,3] [,4]
+[1,]    0    0    0    0
+[2,]    1    0    0    0
+[3,]    1    1    0    0
+[4,]    1    1    1    0
+[5,]    1    1    1    1
+\end{Code} 
+
+\subsection[Functions of the package DAKS]{Functions of the package \pkg{DAKS}}
+\label{fun}
+
+We introduce the functions of the package \pkg{DAKS}. The main functions are for performing 
+the IITA algorithms, in sample and population values. We also present more minor auxiliary 
+(used for implementing the IITA algorithms) and utility functions of the package.
+Examples of how to use the functions are given in Section \ref{Demo}, where we also illustrate 
+the connections between the functions.
+
+\subsubsection{Main functions for performing the IITA algorithms in sample values}
+
+\paragraph{\it Generating automatically the set of competing quasi orders.}
+The main function of the package \pkg{DAKS} that can be used to perform one of the original, 
+corrected, and minimized corrected IITA procedures selectively (Section \ref{subsec:IITA}) is: 
+\begin{Code}
+iita(dataset, v)
+\end{Code}
+Whereas for the three IITA functions \code{orig_iita}, \code{corr_iita}, and \code{mini_iita}
+described subsequently selection sets of competing quasi orders have to be passed via an argument
+manually, the function \code{iita} automatically generates a selection set from the \code{dataset} using the inductive generation procedure implemented in the auxiliary function 
+\code{ind_gen} (see below). The parameter \code{v} specifies the IITA algorithm to be performed: \code{v = 1} (minimized corrected), \code{v = 2} (corrected), and \code{v = 3} (original). 
+The function \code{iita} returns, besides the $\mathit{diff}$ values corresponding to the inductively
+generated quasi orders, the derived solution quasi order (with minimum $\mathit{diff}$ value) under the selected algorithm, the estimated error rate corresponding to the best fitting quasi order, the index of the solution quasi order in the selection set, and an index specifying the used algorithm. 
+In case of ties in minimum $\mathit{diff}$ value, a quasi order with smallest size is returned. 
+In general, the minimized corrected version gives the best results, hence it is suggested to use 
+this version.
+
+The function \code{iita} automatically generates a selection set from the data 
+using the inductive generation procedure implemented in \code{ind_gen} (see below), and calls 
+one of the following three IITA functions for computing the $\mathit{diff}$ values. The approach 
+using \code{iita} is common so far in KST, where the inductive data analysis methods have 
+been utilized for exploratory derivations of quasi orders from data. The functions 
+\code{orig_iita}, \code{corr_iita}, and \code{mini_iita}, on the other hand, can be used to select 
+among surmise relations for instance obtained from querying experts or from competing
+psychological theories.
+
+\paragraph{\it Passing manually the set of competing quasi orders.}
+Three functions of the package \pkg{DAKS} realizing the original, corrected, and minimized 
+corrected IITA algorithms separately (Section \ref{subsec:IITA}) are, in respective order:
+\begin{Code}
+orig_iita(dataset, A)
+corr_iita(dataset, A)
+mini_iita(dataset, A)
+\end{Code}
+These functions perform the respective IITA procedures using the \code{dataset} 
+and the list \code{A} of prespecified competing quasi orders.
+The set of competing quasi orders must be passed via the argument \code{A} manually, so any selection set of surmise relations can be used. In all three functions, the number of estimated counterexamples (according to each algorithm) and the number of observed counterexamples 
+using the auxiliary function \code{ob_counter} (see below) are computed, and the vectors of the $\mathit{diff}$ values 
+\[
+\mathit{diff} (\sqsubseteq, D) = \frac{1}{m(m-1)}\sum_{i \not= j} (b_{ij} - b^*_{ij})^2 
+\]
+and of the error rates (computed within each algorithm) corresponding to the competing 
+quasi orders in \code{A} are returned (cf.\ Section \ref{subsec:IITA}).
+
+\subsubsection{Main functions for performing the IITA algorithms in population values}
+
+The package \pkg{DAKS} also contains functions which provide the basis for statistical inference methodology (cf.\ Section \ref{Conc}). 
+
+\paragraph{\it Population IITA algorithms.}
+The population analog of the previous function that can be used to perform one of the three IITA algorithms in population quantities (in a known population) selectively is:
+\begin{Code}
+pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
+\end{Code}
+Compared to \code{iita}, this function implements the three IITA algorithms in population, not sample, quantities:
+\code{v = 1} (minimized corrected), \code{v = 2} (corrected), and \code{v = 3} (original). 
+See ``Inductive item tree analysis algorithms in population values'' in Section \ref{subsec:IITA}
+for details.
+The argument \code{imp} specifies a surmise relation, and \code{items} gives the number of items of the domain taken as basis for \code{imp}. 
+The knowledge structure corresponding to \code{imp} is equipped 
+with the careless error \code{ce} and lucky guess \code{lg} probabilities and the uniform distribution on the knowledge states, and is the known BLIM underlying the population. 
+From this BLIM the occurrence probabilities $\rho(R)$ of response patterns $R\subset Q$ can be computed, and the algorithms can be performed in population values. 
+If \code{dataset = NULL} and \code{A = NULL}, a set of competing quasi orders is constructed based on a population analog of the inductive generation procedure implemented in sample quantities 
+in \code{ind_gen} (see below). If the \code{dataset} is specified explicitly, that data are used 
+to generate the set of competing quasi orders based on the sample version of the inductive generation procedure. If the selection set \code{A} of quasi orders is specified explicitly, 
+this is used as the set of competing quasi orders. (Specifying both \code{dataset} and \code{A} 
+gives an error.) This function returns the population $\mathit{diff}$ values corresponding to the inductively generated quasi orders, 
+all possible response patterns with their population probabilities of occurrence,
+the population $\gamma_{_\sqsubseteq}$ rates corresponding to the inductively generated quasi orders, the selection set, and an index specifying the used algorithm.
+
+\paragraph{\it Computing population asymptotic variances.}
+The function for computing population asymptotic variances of the MLEs $\mathit{diff}$ 
+\citep[Section \ref{subsec:IITA};][]{US:10} is:
+\begin{Code}
+pop_variance(pop_matrix, imp, error_pop, v)
+\end{Code}
+Subject to the selected version to be performed in population quantities, \code{v = 1} (minimized corrected) and \code{v = 2} (corrected),
+this function computes the population asymptotic variance of the MLE $\mathit{diff}$, 
+which is formulated for the relation and 
+error rate specified in \code{imp} and \code{error_pop}, respectively. 
+This population variance, which is a function of the true multinomial probabilities $\rho(R)$, 
+is obtained using the delta method \citep[e.g., see][]{CB:02}, 
+which requires calculating the Jacobian matrix of the 
+$\mathit{diff}$ coefficient and the inverse of the expected Fisher information matrix for the multinomial distribution.\footnote{\label{footnote:asympvar}The population asymptotic variance 
+of the MLE $\mathit{diff}$ is
+\[
+Var(\mathit{diff})= \partial \,\mathit{diff} / \partial \,\theta_{|\theta=\theta_t} \cdot
+\left\{\left(\frac{1}{n}E_{\theta_t}(-I)\right)^{-1} \cdot \partial \,\mathit{diff} / \partial 
+\,\theta_{|\theta=\theta_t}^T\right\},
+\]
+where $\theta_t$ is the true parameter vector of multinomial probabilities. Note that 
+$(\frac{1}{n}E_{\theta_t}(-I))^{-1}=\left(\delta_{ij}{\theta_t}_i-{\theta_t}_i{\theta_t}_j\right)_{i,j}$,
+where $I=\left(\partial^2 \ln L / \partial \,\theta_i \,\partial \,\theta_j\right)_{i,j}$
+is the Hessian matrix of the log likelihood function of the multinomial distribution,
+and $\delta_{ij}$ is the Kronecker delta. Here, $A^T$ denotes the transpose of a matrix $A$.} 
+Both matrices, functions of the true multinomial probabilities $\rho(R)$,
+are implemented analytically in closed form. 
+The cell probabilities of that distribution are specified in \code{pop_matrix}, a matrix of all possible response patterns and their population occurrence probabilities.
+Note that the arguments \code{pop_matrix} and \code{error_pop} can be obtained from a call to the function \code{pop_iita} (see above),
+and that the current version of the package \pkg{DAKS} does not support computing population asymptotic variances for the original IITA algorithm.
+This function returns a single value, the population asymptotic variance of the MLE $\mathit{diff}$.
+
+\paragraph{\it Computing estimated asymptotic variances.}
+The function for computing estimated asymptotic variances of the MLEs $\mathit{diff}$ 
+\citep[Section \ref{subsec:IITA};][]{US:10} is:
+\begin{Code}
+variance(dataset, imp, v)
+\end{Code}
+Subject to the selected version to be performed in sample quantities, \code{v = 1} (minimized corrected) and \code{v = 2} (corrected),
+this function computes a consistent estimator for the population asymptotic variance 
+of the MLE $\mathit{diff}$, which is formulated for the relation and the data specified 
+in \code{imp} and \code{dataset}, respectively. This estimated asymptotic variance is obtained 
+using the delta method (cf.\ \code{pop_variance}; see above).
+In the expression for the population asymptotic variance (see Footnote \ref{footnote:asympvar}), 
+a function of the true probabilities $\rho(R)$, the true parameter vector of the multinomial probabilities is estimated 
+and substituted in the expression by its MLE of the relative frequencies of the response patterns. 
+Note that the two types of estimators for the population asymptotic variances of the 
+$\mathit{diff}$ coefficients obtained based on the expected Fisher information matrix 
+and the observed Fisher information matrix yield the same result, 
+in the case of the multinomial distribution. Since computation based on the expected Fisher 
+information matrix is faster, this is implemented in \code{variance}. Note that the current version 
+of the package \pkg{DAKS} does not support computing estimated asymptotic variances 
+for the original IITA algorithm. This function returns the estimated asymptotic variance 
+of the MLE $\mathit{diff}$.
+
+\paragraph{\it Performing a $Z$-test.}
+The function for performing a $Z$-test for the $\mathit{diff}$ values is:
+\begin{Code}
+z_test(dataset, imp, imp_alt = NULL, alternative = 
+c("two.sided", "less", "greater"), mu = 0, conf.level = 0.95, v)
+\end{Code}
+For a given \code{dataset} a one or two sample $Z$-test for the $\mathit{diff}$ values 
+can be performed. The quasi order is specified by \code{imp} in the case of a one sample test, 
+and an optional set of implications representing the alternative quasi order is specified 
+by \code{imp_alt} in the case of a two sample test. 
+The true value of the mean, or of the difference in means if a two sample test is performed,
+is given by \code{mu}. The alternative hypothesis is specified by \code{alternative}. 
+For a one sample test, \code{conf.level} gives the level of the confidence interval for 
+the single $\mathit{diff}$ value. For a two sample test, \code{conf.level} is the level 
+of the confidence interval for the difference of the two $\mathit{diff}$ values. 
+The function \code{z_test} returns the $Z$- and $p$-values, the values and level
+of the confidence interval, the $\mathit{diff}$ values of the specified quasi orders, 
+the specified alternative hypothesis, and the assumed true value of the mean
+or difference in means.
+
+\subsubsection{Auxiliary functions used for implementing the IITA algorithms}
+
+Two auxiliary functions used for implementing the IITA algorithms are:
+\begin{Code}
+ob_counter(dataset)
+ind_gen(b)
+\end{Code}
+
+The main function \code{iita} (see above) calls \code{ob_counter} for computation of the numbers 
+of observed counterexamples, and \code{ind_gen} for the inductive generation procedure.
+
+\paragraph{\it Computation of the numbers of observed counterexamples.}
+The function \code{ob_counter} computes from a binary \code{dataset} for any item pair $(i,j)$ 
+the corresponding number $b_{ij}$ of observed counterexamples, that is, the number
+of observed response patterns contradicting the item pair's interpretation as
+$j \rightarrow i$. These values are crucial in the formulations of the IITA algorithms 
+(see Section \ref{subsec:IITA} for details). This function returns a matrix of the numbers 
+of observed counterexamples for all pairs of items. 
+
+\paragraph{\it Inductive generation procedure.}
+The function \code{ind_gen} can be used to generate inductively from a matrix \code{b} 
+of the numbers of observed counterexamples for all pairs of items, for instance obtained 
+from a call to the previous function \code{ob_counter}, a set of quasi orders. The inductive generation of the selection set of competing quasi orders is a prime component of the 
+IITA algorithms (see Section \ref{subsec:IITA} for details). This function returns a list of the 
+inductively generated surmise relations.
+
+\subsubsection{Utility functions}
+
+Two functions for switching between test item and knowledge state representations
+(cf.\ Birkhoff's theorem in Section \ref{subsec:KST}) are:
+\begin{Code}
+state2imp(P)
+imp2state(imp, items)
+\end{Code}
+
+\paragraph{\it Transformation from knowledge states to implications.}
+The function \code{state2imp} transforms a set of knowledge states 
+(ought to be a quasi ordinal knowledge space) \code{P} 
+to the corresponding set of implications (the surmise relation). Note that for any set of knowledge states the returned binary relation is a surmise relation.
+The number of items of the domain taken as basis for \code{P} is determined from the number of columns of the matrix \code{P}.
+
+\paragraph{\it Transformation from implications to knowledge states.}
+The function \code{imp2state} transforms a set of implications (ought to be a surmise relation) 
+\code{imp} to the corresponding set of knowledge states (the quasi ordinal knowledge space).
+Note that for any set of implications the returned knowledge structure is a quasi ordinal knowledge space.
+The number of items of the domain taken as basis for \code{imp}, the argument \code{items}, must be specified explicitly; because 
+some of the items may not be comparable with any other.
+
+\paragraph{\it Computing absolute frequencies of response patterns and knowledge states.}  
+A function for computing the absolute frequencies of the occurring response patterns, 
+and optionally, the absolute frequencies of a collection of knowledge states in a dataset 
+(see Section \ref{subsec:KST}) is:
+\begin{Code}
+pattern(dataset, n = 5, P = NULL)
+\end{Code}
+Argument \code{n} refers to response patterns. If \code{n} is specified, the response patterns with the \code{n} highest 
+frequencies are returned (along with their frequencies).  If \code{pattern} is called without specifying \code{n} explicitly, by default \code{n = 5} is used. If \code{n} is larger than the number of different response patterns in the \code{dataset}, \code{n} is set the number of different response patterns.
+The optional matrix \code{P} gives the knowledge states to be used; \code{pattern} then additionally returns information about 
+how often the knowledge states occur in the \code{dataset}.
+The default \code{P = NULL} corresponds to no knowledge states being specified;
+\code{pattern} then only returns information about response patterns 
+(as described previously).\footnote{Although throughout this paper all discussion is centered 
+around dichotomously scored items, we want to mention that the function \code{pattern}
+even works with polytomous items, but such main functions as \code{iita} of the package 
+do not.} 
+
+\paragraph{\it Data and quasi order simulation tool.}
+A data (based on the BLIM; Section \ref{subsec:KST}) and quasi order simulation tool 
+is included in the package:
+\begin{Code}
+simu(items, size, ce, lg, imp = NULL, delta)
+\end{Code}
+The number of response patterns to be simulated (the sample size) is specified by \code{size}, the careless error and lucky guess noise parameters are given
+by \code{ce} and \code{lg}, respectively. 
+The single careless error \code{ce} and lucky guess \code{lg} probabilities are assumed to be 
+constant over all items, and the underlying knowledge states are assumed to be equiprobable.
+(The general form of the BLIM allows for varying careless error and lucky guess rates from item 
+to item and for a general distribution of the knowledge states, which is not identifiable in general, however.) The argument \code{items} gives the number of items of the domain taken as basis 
+for the quasi order underlying the simulation. A specific underlying quasi order can be passed manually via \code{imp}, or it can be generated randomly. If a quasi order is specified manually,
+Birkhoff's theorem (Section \ref{subsec:KST}) is used to derive the corresponding quasi ordinal knowledge space. The latter is equipped with the error probabilities \code{ce} and \code{lg} 
+and the uniform distribution on the set of knowledge states to give the BLIM that is used for simulating the data.
+From this corresponding knowledge structure $\mathcal{K}$, 
+a $0$/$1$-pattern $K\in\mathcal{K}$ is drawn randomly, that is, with probability 
+$p(K)=1/|\mathcal{K}|$. For this drawn pattern, all entries are changed from $1$ to $0$ 
+or from $0$ to $1$ with the prespecified careless error and lucky guess probabilities \code{ce}
+and \code{lg}, respectively. This is repeated \code{size} times to generate a 
+data matrix. Note that this is simulating with a specific BLIM, for which the underlying 
+knowledge states are equiprobable.
+If \code{imp = NULL}, the underlying quasi order is generated randomly as follows. 
+All reflexive pairs are added to the relation. The constant \code{delta} is utilized as the probability 
+for adding each of the remaining non-reflexive item pairs to the relation. 
+The transitive closure of this relation is computed, and the resulting quasi order then is the surmise relation underlying the simulation.
+
+This simulation tool returns the simulated binary dataset and the surmise relation and its corresponding quasi ordinal knowledge space used for simulating the data. 
+The probability specified by \code{delta} does not necessarily correspond to the portion of implications added to the randomly generated quasi order, 
+because the transitive closure is formed. In \cite{SU:09}, a normal sampling scheme for drawing \code{delta} 
+values is proposed. This sampling scheme provides far better representative samples of quasi orders than simply drawing \code{delta} values uniformly 
+from the unit interval. (Surmise relations or knowledge structures, and the representativeness of samples of these, are very important in simulation studies 
+investigating IITA type data analysis methods. The IITA algorithms are sensitive to the underlying surmise relation that is used, and to test their 
+performances objectively, a representative sample of the collection of all quasi orders is needed.)
+
+\paragraph{\it Plotting the Hasse diagram of a surmise relation.}
+Another basic function of the package \pkg{DAKS} is a Hasse diagram drawing 
+device:\footnote{\label{footnote:hasse}The Hasse diagram of a partially ordered set 
+$(P,\mathcal{P})$ is defined as the relation consisting of all pairs $p_1\mathcal{P}p_2$ 
+such that $p_1$ is covered by $p_2$, that is, $p_1\not=p_2$ and there is no 
+$p\in P$, $p\not=p_1$ and $p\not=p_2$, such that $p_1\mathcal{P}p$ and 
+$p\mathcal{P}p_2$. When $P$ is finite, the Hasse diagram of $(P,\mathcal{P})$ 
+provides an efficient summary of $\mathcal{P}$, in the sense that the Hasse diagram 
+of $(P,\mathcal{P})$ is the smallest relation whose (reflexo-)transitive closure is 
+equal to $\mathcal{P}$.
+When $P$ is a small set, the Hasse diagram of $\mathcal{P}$ 
+can be conveniently displayed by a graph drawn according to the following conventions: 
+the elements of $P$ are represented by points on a page, with an ascending edge 
+from $p_1 \in P$ to $p_2 \in P$ if $p_1$ is covered by $p_2$ 
+\citep[e.g.,][pp.\ 14--15]{DF:99}. Hasse diagrams are named after Helmut Hasse
+ (1898--1979), a German mathematician. When being told that such a type of mathematical 
+diagram was named after him, Helmut Hasse himself did not like that, something so 
+``trivial'' being attributed to him.}
+\begin{Code}
+hasse(imp, items)
+\end{Code}
+This function plots the Hasse diagram of a surmise relation \code{imp} 
+(more precisely, of the corresponding quotient set) 
+using the package \pkg{Rgraphviz} \citep{graphviz} from \proglang{Bioconductor} (\url{http://www.bioconductor.org/}), an interface between \proglang{R} and \proglang{Graphviz} 
+(Graph Visualization Software, \url{http://graphviz.org/}).  
+Users must install \proglang{Graphviz} on their computers to plot such a diagram.
+The argument \code{items} gives the number of items of the domain taken as basis for \code{imp}. 
+The function \code{hasse} cannot plot equally informative items. Two items $i$ and $j$ 
+are called equally informative if and only if $j \rightarrow i$ and $i \rightarrow j$.
+Only one, the one with the smallest index, of the equally informative items is drawn, 
+and the equally informative items are returned (as tuples) in a list.
+The plotted Hasse diagram uses as item labels $iL$, a transformation that takes place internally 
+in the packages \pkg{sets} or \pkg{relations}. 
+
+Table \ref{tab:1} summarizes the functions of the package \pkg{DAKS}
+(\code{print} and \code{summary} methods are not listed). 
+
+\begin{center}
+\begin{table}
+\centering
+\begin{tabular}[t]{ll} \cline{1-2}
+Function & Short description \\ 
+\cline{1-2} 
+\code{corr_iita} & Computing $\mathit{diff}$ values for the corrected IITA algorithm\\ 
+\code{hasse} & Plotting a Hasse diagram\\ 
+\code{iita} & Computing sample $\mathit{diff}$ values and the best fitting quasi order \\
+& for one of the three IITA algorithms selectively\\ 
+\code{imp2state} & Transforming from implications to knowledge states\\ 
+\code{ind_gen} & Inductively generating a selection set\\ 
+\code{mini_iita} &  Computing $\mathit{diff}$ values for the minimized corrected IITA algorithm\\  
+\code{ob_counter} & Computing numbers of observed counterexamples\\  
+\code{orig_iita} & Computing $\mathit{diff}$ values for the original IITA algorithm\\ 
+\code{pattern} & Computing frequencies of response patterns and knowledge states\\ 
+\code{pop_iita} & Computing population $\mathit{diff}$ values and the selection set \\
+& for one of the three IITA algorithms selectively\\ 
+\code{pop_variance} & Computing population asymptotic variances\\ 
+\code{simu} & Data and quasi order simulation tool\\ 
+\code{state2imp} & Transforming from knowledge states to implications\\ 
+\code{variance} &  Computing estimated asymptotic variances\\ 
+\code{z_test} & Performing one and two sample $Z$-tests for $\mathit{diff}$ values\\ \cline{1-2}
+\vspace{-0.25cm}
+\end{tabular}
+\caption{Summary of the \pkg{DAKS} functions.}
+\label{tab:1}
+\end{table}
+\end{center}
+
+The interdependencies among the functions of the package are as follows. 
+The function \code{iita} calls the functions \code{ob\_counter} and \code{ind\_gen},
+and depending on the value specified for \code{v}, one of the three IITA functions 
+\code{orig\_iita}, \code{corr\_iita}, and \code{mini\_iita}. Moreover, each of the 
+three functions \code{orig\_iita}, \code{corr\_iita}, and \code{mini\_iita} calls the function \code{ob\_counter}. If the argument \code{dataset} is specified explicitly, the function \code{pop\_iita} calls the functions \code{ob\_counter} and \code{ind\_gen}. The function
+\code{pattern} is called by the function \code{variance}. The function \code{z\_test}
+calls the function \code{variance}, and depending on the value specified for \code{v}, 
+the function \code{corr\_iita} or the function \code{mini\_iita}.
+
+\section[Demonstrating the package DAKS]{Demonstrating the package \pkg{DAKS}}
+\label{Demo}
+
+\subsection{An example with real data}
+\label{subsec:pisa_appl}
+
+We illustrate usage of the package \pkg{DAKS} with part of the 2003 Programme for International Student Assessment (PISA; \url{http://www.pisa.oecd.org/}) data.\footnote{Real applications 
+of KST in a wide range of fields are systematically presented in \cite{AL:99}. For a non-technical
+review of KST including examples as well, see \cite{FKVDJ:90}. A comprehensive bibliography on 
+KST including many references on real applications of KST can be retrieved from 
+\url{http://wundt.kfunigraz.ac.at/kst.php}.}
+
+\subsubsection{The dataset}
+
+The dataset consists of the item responses by $340$ German students on a $5$-item dichotomously scored mathematical literacy test. This is the \code{pisa} dataset accompanying the package \pkg{DAKS}.
+This dataset resulted from dichotomizing the original multiple-choice or open format test data. The scores are $1$ or $0$ for a correct or incorrect 
+response, respectively; there are no missing values in the data.
+Wordings of the test items used in the assessment are not known (not publicly available). 
+
+The first six response patterns of the dataset and the five response patterns with largest 
+absolute frequencies in the data:
+\begin{Schunk}
+\begin{Sinput}
+R> head(pisa)
+\end{Sinput}
+\begin{Soutput}
+  a b c d e
+1 1 0 0 0 0
+2 0 0 0 0 0
+3 1 0 0 0 0
+4 1 0 0 0 0
+5 0 1 0 0 0
+6 1 1 0 0 0
+\end{Soutput}
+\begin{Sinput}
+R> pat <- pattern(pisa)
+R> pat
+\end{Sinput}
+\begin{Soutput}
+5 largest response patterns in the data:  
+11100 11000 10000 11110 00000 
+   67    61    41    40    20 
+\end{Soutput}
+\begin{Sinput}
+R> sum(pat$response.patterns)
+\end{Sinput}
+\begin{Soutput}
+[1] 229
+\end{Soutput}
+\end{Schunk}
+We see that the five most frequent response patterns make up for $229$ out of the $340$ patterns.
+ 
+These are the Guttman patterns of the chain (Footnote \ref{footnote:chain}) 
+$d  \rightarrow c  \rightarrow b \rightarrow a$
+that can likely be assumed to underlie the data. This is also indicated by the following code:
+\begin{Schunk}
+\begin{Sinput}
+R> apply(pisa, 2, table)
+\end{Sinput}
+\begin{Soutput}
+    a   b   c   d   e
+0  51  91 167 261 293
+1 289 249 173  79  47
+\end{Soutput}
+\end{Schunk}
+From items $a$ to $e$, the sample item popularities (proportions-correct) are well-differentiated 
+and strictly decreasing.
+For instance, item $a$ is most popular (most frequently solved), item $e$ is least popular (least frequently solved). Since we do not know whether the underlying quasi order
+may or may not be a chain, we next perform IITA analyses of the PISA data.
+
+\subsubsection{IITA analyses of the PISA data}
+
+\paragraph{\it IITA algorithms.}
+We start with running the three IITA algorithms on these data. The results are assigned to variables for later analyses.
+\begin{Schunk}
+\begin{Sinput}
+R> mini <- iita(pisa, v = 1)
+R> corr <- iita(pisa, v = 2)
+R> orig <- iita(pisa, v = 3)
+R> summary(mini)
+\end{Sinput}
+\begin{Soutput}
+ 	 Inductive Item Tree Analysis
+
+Algorithm: minimized corrected IITA
+diff values: 143.533 137.399 132.133 115.377 120.168 110.487 82.542 38.976 27.566 107.39 242.373 1079.054 2887.721  
+quasi order: {(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L),
+ (2L, 5L), (3L, 4L), (3L, 5L)}
+error rate: 0.116
+index in the selection set: 9
+\end{Soutput}
+\begin{Sinput}
+R> summary(corr)
+\end{Sinput}
+\begin{Soutput}
+ 	 Inductive Item Tree Analysis
+
+Algorithm: corrected IITA
+diff values: 143.533 137.408 132.214 115.385 121.099 113.423 86.066 40.938 33.319 179.645 361.257 1161.384 3192.946  
+quasi order: {(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L),
+ (2L, 5L), (3L, 4L), (3L, 5L)}
+error rate: 0.136
+index in the selection set: 9
+\end{Soutput}
+\begin{Sinput}
+R> summary(orig)
+\end{Sinput}
+\begin{Soutput}
+ 	 Inductive Item Tree Analysis
+
+Algorithm: original IITA
+diff values: 82.156 80.6 78.63 74.668 134.345 122.664 150.889 141.516 133.269 384.97 822.495 1853.682 3192.946  
+quasi order: {(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L)}
+error rate: 0.081
+index in the selection set: 4
+\end{Soutput}
+\end{Schunk}
+
+\paragraph{\it Inductively generated selection set.}
+We additionally present the inductively generated selection set of competing quasi orders, 
+because that helps investigating the results obtained from applying the IITA algorithms.
+(Note that this is practicable when the selection set or the number of items are not too large.)
+For this purpose, the numbers of observed counterexamples for all pairs of items 
+are computed using the function \code{ob_counter}, and the function \code{ind_gen} 
+is applied to inductively generate from the returned matrix of the numbers of observed 
+counterexamples a set of quasi orders. The function \code{ind_gen} returns a list of the 
+inductively generated surmise relations.
+\begin{Schunk}
+\begin{Sinput}
+R> sel_set <- ind_gen(ob_counter(pisa))
+R> sel_set
+\end{Sinput}
+\begin{Soutput}
+[[1]]
+{(1L, 5L)}
+
+[[2]]
+{(1L, 4L), (1L, 5L)}
+
+[[3]]
+{(1L, 4L), (1L, 5L), (2L, 5L)}
+
+[[4]]
+{(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L)}
+
+[[5]]
+{(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 5L)}
+
+[[6]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 5L)}
+
+[[7]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 4L),
+ (3L, 5L)}
+
+[[8]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L), (2L, 5L),
+ (3L, 4L), (3L, 5L)}
+
+[[9]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L),
+ (2L, 5L), (3L, 4L), (3L, 5L)}
+
+[[10]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L),
+ (2L, 5L), (3L, 4L), (3L, 5L), (4L, 5L)}
+
+[[11]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L),
+ (2L, 4L), (2L, 5L), (3L, 4L), (3L, 5L), (4L, 5L), (5L, 4L)}
+
+[[12]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L),
+ (2L, 4L), (2L, 5L), (3L, 4L), (3L, 5L), (4L, 3L), (4L, 5L),
+ (5L, 3L), (5L, 4L)}
+
+[[13]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L),
+ (2L, 4L), (2L, 5L), (3L, 1L), (3L, 2L), (3L, 4L), (3L, 5L),
+ (4L, 1L), (4L, 2L), (4L, 3L), (4L, 5L), (5L, 1L), (5L, 2L),
+ (5L, 3L), (5L, 4L)}
+\end{Soutput}
+\end{Schunk}
+The quasi order with tenth index in the selection set is a chain (Footnote \ref{footnote:chain}), 
+that is, the items form a Guttman scale. The neighboring quasi orders with indices eight, nine, 
+and eleven are very close to a chain. 
+Therefore we expect the underlying quasi order to be one of these four, most likely. 
+Note that inspecting the selection set for specific quasi orders can be useful in general, 
+because the selection set only contains a small fraction of all possible quasi orders.
+
+\paragraph{\it General remarks.}
+The corrected and minimized corrected IITA algorithms yield the same solution quasi order, which is close to a chain (cf.\ Figure \ref{fig:1}). The original IITA algorithm selects a quasi order
+which is clearly different from that returned by the other two algorithms, and which is far from being a chain (cf.\ Footnote \ref{footn:origsol}). 
+This is also reflected by the corresponding $\mathit{diff}$
+values. They are similar for the corrected and minimized corrected IITA algorithms, and considerably smaller than the $\mathit{diff}$ value obtained for the original algorithm.
+There is evidence that the original IITA algorithm fails in revealing underlying ``close-to-chain'' quasi orders.
+Furthermore, fitting the classical Rasch model to this dataset corroborates the chain hierarchy among the five mathematical literacy test items. Since the Rasch model assumes unidimensionality of the latent trait, the items can be ordered linearly along the continuum in terms of their difficulties (with respect to the natural ordering in the reals), resulting in a deterministic Guttman scale; in this 
+regard, see also \cite{U:07}. Due to the highly confirmatory fit statistics obtained for this dataset, 
+the items most likely form a chain.
+For details on comparing the different data analysis methods and psychometric approaches, see  \cite{SU:09} and \cite{US:10}. See also the ``General remarks'' in 
+``Inductive item tree analysis algorithms in sample values'' of Section \ref{subsec:IITA}.
+The present paper rather is on introducing the \proglang{R} package \pkg{DAKS}.
+
+\subsubsection{Comparing and plotting the solution quasi orders obtained from IITA analyses}
+
+\paragraph{\it Comparing using functions of the package \pkg{sets}.}
+One can use functions of the package \pkg{sets}, for example when comparing the solution quasi orders obtained from different IITA algorithms. The next two functions that we describe
+are from the package \pkg{sets}. (Of course, other functions of the package \pkg{sets} 
+can be helpful and used as well.)
+
+The symmetric set difference between the solutions of the original and minimized corrected IITA algorithms can be computed by:
+\begin{Schunk}
+\begin{Sinput}
+R> set_symdiff(orig$implications, mini$implications)
+\end{Sinput}
+\begin{Soutput}
+{(1L, 2L), (1L, 3L), (2L, 3L), (3L, 4L), (3L, 5L)}
+\end{Soutput}
+\end{Schunk}
+The symmetric set difference gives the implications in which the two relations differ.
+
+In the example here we see that all implications of the original IITA algorithm solution are contained 
+in the quasi order derived using the minimized corrected IITA algorithm:
+\begin{Schunk}
+\begin{Sinput}
+R> set_is_proper_subset(orig$implications, mini$implications)
+\end{Sinput}
+\begin{Soutput}
+[1] TRUE
+\end{Soutput}
+\end{Schunk}
+
+\paragraph{\it Plotting the Hasse diagram.}
+Graphics are convenient to use and they can present information effectively.
+The graphic that is used throughout KST is the Hasse diagram (see Footnote \ref{footnote:hasse}). 
+It is utilized for presenting information, not for exploring data.
+For approaches to graphically exploring KST data based on mosaic plots
+for instance, see \cite{US:09}.
+A Hasse diagram can be plotted by:
+\begin{CodeChunk}
+\begin{CodeInput}
+R> hasse(mini$implications, 5)
+\end{CodeInput}
+\begin{CodeOutput}
+list()
+\end{CodeOutput}
+\end{CodeChunk}
+This gives the Hasse diagram of the solution quasi order of the minimized corrected algorithm shown in Figure \ref{fig:1}. From Figure \ref{fig:1} we see that, for example, item $3$ implies 
+items $1$ and $2$, and that item $3$ is implied by items $4$ and $5$. 
+Note that the returned list of equally informative items is empty; therefore the diagram faithfully represents the quasi order. The plotted Hasse diagram uses as item labels $iL$
+(cf.\ Section \ref{fun}).\footnote{\label{footn:origsol}Note that the solution quasi order obtained 
+for the PISA dataset
+under the original IITA algorithm is given by \code{\{(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L)\}}. If we 
+denote this quasi order on $Q=\{a,b,c,d,e\}$ by $\sqsubseteq$, then $a\sqsubseteq d$,
+$a\sqsubseteq e$, $b\sqsubseteq d$, and $b\sqsubseteq e$. In particular, item $c$ is 
+$\sqsubseteq$-incomparable with any of the other items $a,b,d,e$, items $a$ and $b$ are 
+$\sqsubseteq$-incomparable, and items $d$ and $e$ are $\sqsubseteq$-incomparable.
+Here we call $q_1,q_2\in Q$ $\sqsubseteq$-incomparable if and only if 
+$q_1\not\sqsubseteq q_2$ and $q_2\not\sqsubseteq q_1$.}
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{hasse_pisa.pdf}
+\caption{Hasse diagram of the quasi order obtained for the PISA dataset under the minimized corrected IITA algorithm.}
+\label{fig:1}
+\end{figure}  
+\end{center}
+
+\paragraph{\it Comparing using the $Z$-test.}
+We perform a $Z$-test to check whether the quasi order obtained by the corrected and minimized corrected IITA algorithms has a smaller $\mathit{diff}$ value than the quasi order forming a chain. 
+If this is not the case, we cannot say with certainty whether the derived quasi order is significantly 
+better than the chain hierarchy.
+\begin{Schunk}
+\begin{Sinput}
+R> z_test(pisa, sel_set[[10]], sel_set[[9]], alternative = "less", 
+R+    v = 1)
+\end{Sinput}
+\begin{Soutput}
+ 	 Two sample Z-test
+
+z =  2.2666  p-value =  0.0117  
+alternative hypothesis: true mean is less 0  
+95 percent confidence interval:
+  0.0001894101 Inf
+sample estimates:
+    mean in imp mean in imp_alt 
+        0.00093         0.00024 
+\end{Soutput}
+\end{Schunk}
+The $p$-value is $0.0117$, hence it can be assumed that the $\mathit{diff}$ value 
+of the derived quasi order is significantly smaller than the $\mathit{diff}$ value 
+of the chain. According to the $\mathit{diff}$ criterion, therefore the obtained quasi 
+order has a distinctly better fit to the data.
+
+Through previous analyses we have gained information about the dependencies between 
+the test items of the PISA dataset. We have seen that, for instance, items $4$ and $5$ 
+imply all other items. Therefore we can surmise from a student's solving the items $4$ or $5$
+that this student will also be able to solve items $1$, $2$, and $3$. Such information can be used 
+in computerized adaptive testing, in order to reduce the number of items 
+administered to the student.
+
+\subsection{An example with simulated data} 
+\label{subsec:simu}
+
+To illustrate the other functions of the package \pkg{DAKS}, we start with simulating a 
+quasi order and a dataset. Note that every simulation is individual, in the sense that different results 
+are obtained from simulation to simulation.\footnote{The following simulation is meant for demonstrating the functions 
+of the package \pkg{DAKS}.
+Extensive simulation studies based on or investigating the BLIM in KST are presented, for instance,
+in \cite{SU:09}, \cite{Schrepp:03, S:05}, \cite{SR:09}, \cite{U:06}, and \cite{US:10}.
+For example, \cite{SR:09}, among other things, assess goodness-of-fit 
+of the BLIM to simulated data via Pearson's $X^2$.
+The comprehensive bibliography on KST at \url{http://wundt.kfunigraz.ac.at/kst.php}
+includes many more references on theoretical and simulation studies in KST.} 
+
+\subsubsection{Data and quasi order simulation}
+
+Since \code{imp = NULL}, a quasi order 
+is generated randomly using a probability of \code{delta = 0.15} for adding an implication 
+to the relation. Based on this underlying surmise relation, a binary dataset consisting of $9$ 
+items and $1500$ examinees is simulated using a same careless error and lucky guess 
+rate of $0.1$ over all items. The simulated binary dataset and the simulated surmise relation 
+and its corresponding quasi ordinal knowledge space are returned.
+\begin{Schunk}
+\begin{Sinput}
+R> ex_data <- simu(9, 1500, 0.1, 0.1, delta = 0.15)
+\end{Sinput}
+\end{Schunk}
+
+The randomly generated quasi order underlying the simulated data is:
+\begin{Schunk}
+\begin{Sinput}
+R> ex_data$implications
+\end{Sinput}
+\begin{Soutput}
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 7L), (1L, 8L),
+ (1L, 9L), (2L, 3L), (2L, 4L), (2L, 5L), (2L, 7L), (2L, 8L),
+ (2L, 9L), (3L, 2L), (3L, 4L), (3L, 5L), (3L, 7L), (3L, 8L),
+ (3L, 9L), (4L, 2L), (4L, 3L), (4L, 5L), (4L, 7L), (4L, 8L),
+ (4L, 9L), (6L, 2L), (6L, 3L), (6L, 4L), (6L, 5L), (6L, 7L),
+ (6L, 8L), (6L, 9L), (7L, 2L), (7L, 3L), (7L, 4L), (7L, 5L),
+ (7L, 8L), (7L, 9L), (8L, 2L), (8L, 3L), (8L, 4L), (8L, 5L),
+ (8L, 7L), (8L, 9L), (9L, 2L), (9L, 3L), (9L, 4L), (9L, 5L),
+ (9L, 7L), (9L, 8L)}
+\end{Soutput}
+\end{Schunk}
+
+\subsubsection{Corrected IITA analyses of the simulated data}
+
+In the following, analyses are performed under the corrected IITA algorithm only; 
+under the other two algorithms the analyses are analogous. 
+We run the corrected IITA procedure on the simulated dataset.
+\begin{Schunk}
+\begin{Sinput}
+R> ex_corr <- iita(ex_data$dataset, v = 2)
+R> ex_corr
+\end{Sinput}
+\begin{Soutput}
+ 	 Inductive Item Tree Analysis
+
+Algorithm: corrected IITA
+
+quasi order: {(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 7L), (1L, 8L),
+ (1L, 9L), (2L, 3L), (2L, 5L), (2L, 7L), (2L, 8L), (3L, 5L),
+ (3L, 7L), (3L, 8L), (4L, 2L), (4L, 3L), (4L, 5L), (4L, 7L),
+ (4L, 8L), (4L, 9L), (6L, 2L), (6L, 3L), (6L, 4L), (6L, 5L),
+ (6L, 7L), (6L, 8L), (6L, 9L), (7L, 3L), (7L, 5L), (7L, 8L),
+ (8L, 3L), (8L, 5L), (8L, 7L), (9L, 2L), (9L, 3L), (9L, 5L),
+ (9L, 7L), (9L, 8L)}
+\end{Soutput}
+\end{Schunk}
+
+The quasi order obtained by data analysis is the true quasi order underlying the data. 
+(This of course may not always be the case.)
+\begin{Schunk}
+\begin{Sinput}
+R> ex_corr$implications == ex_data$implications
+\end{Sinput}
+\begin{Soutput}
+[1] FALSE
+\end{Soutput}
+\end{Schunk}
+
+\subsubsection{Corrected IITA analyses in the population}
+
+Next we discuss the functions which provide the basis for statistical inference methodology. 
+
+\paragraph{\it Corrected IITA algorithm.}
+The corrected IITA algorithm can be performed in population quantities, yielding information 
+about the population $\mathit{diff}$ values, population occurrence probabilities of response 
+patterns, population error rates, and the inductively generated selection set:
+\begin{Schunk}
+\begin{Sinput}
+R> pop <- pop_iita(ex_data$implications, 0.1, 0.1, 9, dataset = ex_data$dataset, 
+R+    v = 2)
+R> attributes(pop)
+\end{Sinput}
+\begin{Soutput}
+$names
+[1] "pop.diff"      "pop.matrix"    "error.pop"     "selection.set"
+[5] "v"            
+
+$class
+[1] "popiita"
+\end{Soutput}
+\end{Schunk}
+For the argument \code{imp} we use the simulated surmise relation \code{ex_data$implications}, 
+with $9$ items of the domain for this quasi order. The knowledge structure corresponding 
+to \code{ex_data$implications} is equipped with a same careless error and lucky guess rate 
+of $0.1$ over all items. Since \code{dataset = ex_data$dataset} (and \code{A = NULL}), 
+the simulated binary data are used to generate the set of competing quasi orders based 
+on the sample version of the inductive generation procedure (cf.\ Section \ref{fun}).
+
+\paragraph{\it Sample and population $\mathit{diff}$ values.}
+To compare sample with population $\mathit{diff}$ values, the sample $\mathit{diff}$ coefficient is transformed to become 
+the MLE for the corresponding population $\mathit{diff}$ coefficient (see Section \ref{subsec:IITA} for the definition of $\mathit{diff}$):
+\begin{Schunk}
+\begin{Sinput}
+R> round(ex_corr$diff/1500^2, 4)
+\end{Sinput}
+\begin{Soutput}
+ [1] 0.0114 0.0114 0.0112 0.0110 0.0108 0.0107 0.0105 0.0103 0.0102
+[10] 0.0100 0.0099 0.0095 0.0094 0.0092 0.0091 0.0084 0.0083 0.0077
+[19] 0.0066 0.0060 0.0049 0.0043 0.0037 0.0015 0.0010 0.0004 0.0004
+[28] 0.0004 0.0005 0.0005 0.0005 0.0018 0.0063
+\end{Soutput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+R> round(pop$pop.diff, 4)
+\end{Sinput}
+\begin{Soutput}
+ [1] 0.0110 0.0110 0.0109 0.0107 0.0106 0.0104 0.0103 0.0102 0.0100
+[10] 0.0099 0.0097 0.0095 0.0093 0.0091 0.0089 0.0082 0.0081 0.0076
+[19] 0.0064 0.0059 0.0048 0.0042 0.0037 0.0014 0.0009 0.0003 0.0003
+[28] 0.0003 0.0003 0.0003 0.0003 0.0015 0.0058
+\end{Soutput}
+\end{Schunk}
+The respective sample and population values are quite similar, already for a
+sample size of $1500$. This is obvious given the fact that the sample $\mathit{diff}$ 
+values converge in probability (and expectation) to the population $\mathit{diff}$ values
+(see Section \ref{subsec:IITA}).
+
+The quasi order with minimum population $\mathit{diff}$ value can be queried:
+\begin{Schunk}
+\begin{Sinput}
+R> mp <- which.min(pop$pop.diff)
+R> pop$selection.set[[mp]]
+\end{Sinput}
+\begin{Soutput}
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 7L), (1L, 8L),
+ (1L, 9L), (2L, 3L), (2L, 5L), (2L, 7L), (2L, 8L), (3L, 5L),
+ (3L, 7L), (3L, 8L), (4L, 2L), (4L, 3L), (4L, 5L), (4L, 7L),
+ (4L, 8L), (4L, 9L), (6L, 2L), (6L, 3L), (6L, 4L), (6L, 5L),
+ (6L, 7L), (6L, 8L), (6L, 9L), (7L, 3L), (7L, 5L), (7L, 8L),
+ (8L, 3L), (8L, 5L), (8L, 7L), (9L, 2L), (9L, 3L), (9L, 5L),
+ (9L, 7L), (9L, 8L)}
+\end{Soutput}
+\end{Schunk}
+This quasi order is the true quasi order underlying the simulated dataset. Of course this may not always be the case, especially for smaller sample sizes or higher response error rates. 
+
+The population
+analogs are useful for comparing the IITA algorithms \citep{US:10}. In \cite{US:10}, a thorough
+simulation study is performed. It is shown that the original IITA algorithm leads to bad results 
+in population (and sample) values. In this regard, see also the ``General remarks'' in 
+``Inductive item tree analysis algorithms in sample values'' of Section \ref{subsec:IITA}.
+Hence the corrected and minimized corrected IITA algorithms are recommended for use 
+in real applications. 
+
+\paragraph{\it Estimated and population asymptotic variances.}
+As mentioned in Section \ref{subsec:IITA}, the MLEs $\mathit{diff}$ are asymptotically normal. 
+Large sample normality with associated standard errors can be used to construct confidence 
+intervals for the population values 
+of and to test hypotheses about the $\mathit{diff}$ coefficients (cf.\ Sections \ref{fun} and 
+\ref{subsec:pisa_appl}).
+For instance, using the function \code{z_test} we can test whether one of two quasi orders 
+has a significantly smaller $\mathit{diff}$ value in the population. The quasi orders could, for example, be derived from querying experts. In order to do such a test, 
+the asymptotic variances need to be estimated. Population asymptotic variances and consistent estimators thereof can be computed 
+using the delta method (cf.\ Section \ref{fun}).
+
+The estimated asymptotic variance of the MLE $\mathit{diff}$ in the sample version 
+corrected IITA algorithm can be computed by:
+\begin{Schunk}
+\begin{Sinput}
+R> var_sample <- variance(ex_data$dataset, ex_data$implications, 
+R+    v = 2)
+R> var_sample
+\end{Sinput}
+\begin{Soutput}
+[1] 0.000136839
+\end{Soutput}
+\begin{Sinput}
+R> sqrt(var_sample)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.01169782
+\end{Soutput}
+\end{Schunk}
+This estimated asymptotic variance is formulated for the simulated data \code{ex_data$dataset}
+and the randomly generated surmise relation \code{ex_data$implications} 
+underlying these data.
+
+The corresponding population asymptotic variance of the MLE $\mathit{diff}$ in the population
+version corrected IITA algorithm is:
+\begin{Schunk}
+\begin{Sinput}
+R> pop_variance <- pop_variance(pop$pop.matrix, pop$selection.set[[mp]], 
+R+    pop$error.pop[mp], v = 2)
+R> pop_variance
+\end{Sinput}
+\begin{Soutput}
+[1] 6.109545e-06
+\end{Soutput}
+\begin{Sinput}
+R> sqrt(pop_variance)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.002471749
+\end{Soutput}
+\end{Schunk}
+This population asymptotic variance is formulated for the population cell probabilities 
+\linebreak
+\code{pop$pop.matrix} of the multinomial distribution and the population error rate obtained 
+for the true quasi order (with minimum population $\mathit{diff}$ value) underlying the 
+simulated data. Note that in this example the arguments \code{pop_matrix} and \code{error_pop} 
+are obtained from a call to the function \code{pop_iita}. For the argument \code{imp}
+we use the true quasi order.
+
+The sample and population values are quite similar. The sample variance is a consistent 
+estimator for the population variance (convergence in probability). This and the function \code{variance} are important, because in real applications the estimated asymptotic variance 
+has to be used (e.g., for calculating standard deviations of the $\mathit{diff}$ measures 
+or for performing such significance tests as the \code{z_test}).
+
+\section{Conclusion}
+\label{Conc}
+
+\paragraph{\it Summary.}
+This paper has introduced the \proglang{R} package \pkg{DAKS}. This package contains several basic functions for KST, and it primarily implements the IITA methods for data analysis in KST, at the level
+of both sample and population values. Functions for computing various population values and for estimating asymptotic variances and performing $Z$-tests are also contained. 
+These tools provide the basis for statistical inference methodology and for further analyses in KST. We have described the functions of the package \pkg{DAKS} and demonstrated their usage by real and simulated data examples.
+
+\paragraph{\it Some suggestions for future implementations of the package.}
+In future research, we plan to implement other fit measures such as the $\mathit{di}$ (discrepancy)
+index \citep{KKVF:94} or the $\mathit{CA}$ (correlational agreement) coefficient \citep{L:74}. 
+Functions for computing confidence intervals and for performing hypothesis tests for the 
+$\mathit{diff}$ and other fit measures will also be implemented. 
+The present functions of the package are to be extended; for example, the function \code{hasse} should incorporate drawing diagrams for knowledge structures, or the simulation tool could allow 
+for individual response error probabilities for each item.
+
+\paragraph{\it General remarks about the interplay between KST and IRT.}
+By contributing the \proglang{R} package \pkg{DAKS} we hope to have established a basis for computational work in the so far combinatorial theory of knowledge spaces. Implementing KST procedures in \proglang{R} can help to bring together KST and IRT. 
+A number of \proglang{R} packages are available for IRT; for instance, \pkg{ltm} \citep{ltm} or \pkg{mokken} \citep{mokken}. KST and IRT are split directions of psychological test theories and 
+have recently been partly compared at a theoretical level \citep{S:06,SR:09,U:06,U:07}. Using
+\proglang{R} as an interface between these theories may prove valuable in comparing them 
+at a computational level.
+
+Why should one be interested in trying to unify KST and IRT? 
+What can KST contribute to IRT, and vice versa?
+The following lists some arguments supporting the importance of a possible fusion 
+of KST and IRT \citep[cf.][]{U:07}.
+
+\begin{description}
+\item[\hspace{-0.165cm}]
+\textit{Statistical inference methodologies.}
+An IRT-type modeling in KST could provide feasible new statistical inference methodologies. 
+For IRT, unlike KST, has plenty of sophisticated statistical methods that could be suited to and applied in KST \citep[e.g.,][]{SkronRabe:04}.
+
+\item[\hspace{-0.165cm}]
+\textit{Restrictivity.} 
+IRT models that simultaneously imply person and item orderings are restrictive models 
+with respect to real data \citep[e.g.,][]{SijtMole:02}. 
+In general, they will not fit many empirical datasets. 
+A unified test theory combining KST and IRT could positively contribute to and improve 
+on this observation. For a strength of KST is that it implies very general combinatorial structures, 
+both at the levels of persons and items, contrary to IRT, implying more restrictive linear orderings.
+KST further provides mathematical results on the linkage between these levels, offering flexibility 
+in the choice of a representation.
+A unified approach could deliver as general as possible probabilistic models that could
+imply both a person ordering and an item ordering, extend linear orderings to more general 
+surmise relations or even surmise systems, allow for flexibility
+in representation, 
+encompass most of the existing IRT and KST models as special cases, and thus fit 
+far more datasets in practice.  
+ 
+\item[\hspace{-0.165cm}]
+\textit{Adaptive testing.}
+A unified test theory could also positively contribute 
+to the problem of adaptive testing in nonparametric IRT 
+using ordinal measurement information \citep[e.g.,][]{HuisMole:01}.
+Adaptive testing, however, is a major strength of KST.
+
+\item[\hspace{-0.165cm}]
+\textit{Qualitative derivation of hierarchies among items.}
+KST offers a number of `a priori' qualitative, psychological theory driven 
+methods for the derivation of hierarchies among items 
+\citep[e.g.,][]{AL:99}.
+In IRT, however, orderings of items are obtained `a posteriori' by using 
+quantitative, statistical methods (e.g., by estimating the difficulty parameter of each item). 
+A unified framework could provide qualitative, theory driven, or quantitative, statistical, 
+or hybrid derivation methods. 
+\end{description}
+
+The \proglang{R} environment 
+is ideally suited for a unified test theory combining KST and IRT.
+Such a comprehensive environment can encompass many existing KST and IRT 
+models and software, unified under one umbrella.
+This implies easy access to and use of software for the
+practical application of the unified test theory, KST, and
+IRT models to empirical data.
+
+\section*{Acknowledgments}
+
+We thank the two anonymous reviewers for their critical and valuable comments 
+that helped to improve the manuscript greatly.
+
+\bibliography{kst}
+
+\end{document}

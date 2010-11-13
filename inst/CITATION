@@ -1,0 +1,20 @@
+citHeader("To cite DAKS in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{DAKS}: An {R} Package for Data Analysis Methods in Knowledge Space Theory",
+  author       = personList(as.person("Ali \\\"Unl\\\"u"),
+                   as.person("Anatol Sargin")),
+  journal      = "Journal of Statistical Software",
+  year         = "2010",
+  volume       = "37",
+  number       = "2",
+  pages        = "1--31",
+  url          = "http://www.jstatsoft.org/v37/i02/",
+
+  textVersion  =
+  paste("Ali Uenlue, Anatol Sargin (2010).",
+        "DAKS: An R Package for Data Analysis Methods in Knowledge Space Theory.",
+        "Journal of Statistical Software, 37(2), 1-31.",
+        "URL http://www.jstatsoft.org/v37/i02/.")
+)
+

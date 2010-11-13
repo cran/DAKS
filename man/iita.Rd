@@ -86,8 +86,10 @@ iita(dataset, v)
   dependencies between items of a questionnaire. \emph{Methods of
   Psychological Research}, \bold{19}, 43--79.
 
-Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
-  analysis methods in knowledge space theory. Manuscript under revision.
+  Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. \emph{Journal of Statistical
+  Software}, \bold{37}(2), 1--31.
+  URL \url{http://www.jstatsoft.org/v37/i02/}.
 
  Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for

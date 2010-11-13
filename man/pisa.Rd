@@ -31,8 +31,11 @@ pisa
 Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   Corrections, improvements, and comparisons. \emph{Mathematical Social Sciences}, \bold{58}, 376--392.
 
-
-Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data analysis methods in knowledge space theory. Manuscript under revision.}
+  Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. \emph{Journal of Statistical
+  Software}, \bold{37}(2), 1--31.
+  URL \url{http://www.jstatsoft.org/v37/i02/}.
+}
 \seealso{
   See \code{\link{DAKS-package}} for general information about this
   package.

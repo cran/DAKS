@@ -27,8 +27,10 @@ hasse(imp, items)
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
-Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
-  analysis methods in knowledge space theory. Manuscript under revision.
+  Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
+  analysis methods in knowledge space theory. \emph{Journal of Statistical
+  Software}, \bold{37}(2), 1--31.
+  URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
   Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
@@ -53,10 +55,10 @@ Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
   package.
 }
 \examples{
-## requires the package \pkg{Rgraphviz} from \proglang{Bioconductor}
-## users must install \proglang{Graphviz} on their computers
+## requires the package Rgraphviz from Bioconductor
+## users must have installed Graphviz on their computers
 \dontrun{
-  hasse(iita(pisa, v = 2)$implications, 5)
+hasse(iita(pisa, v = 2)$implications, 5)
 }
 }
 \keyword{graphs}

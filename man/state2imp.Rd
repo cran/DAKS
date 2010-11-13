@@ -29,7 +29,9 @@ state2imp(P)
   Berlin, Heidelberg, and New York: Springer-Verlag.
 
   Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
-  analysis methods in knowledge space theory. Manuscript under revision. 
+  analysis methods in knowledge space theory. \emph{Journal of Statistical
+  Software}, \bold{37}(2), 1--31.
+  URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
   Anatol Sargin \email{sargin@statistik.tu-dortmund.de},

@@ -21,8 +21,8 @@
   \tabular{ll}{
     Package: \tab \pkg{DAKS}\cr
     Type: \tab Package\cr
-    Version: \tab 2.1-0\cr
-    Date: \tab 2010-06-19\cr
+    Version: \tab 2.1-1\cr
+    Date: \tab 2010-11-13\cr
     License: \tab \acronym{GPL} (>= 2)
   }
   Knowledge space theory is a recent psychometric test theory based on
@@ -75,7 +75,9 @@ Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
   Psychological Research}, \bold{19}, 43--79.
 
   Uenlue, A. and Sargin, A. (2010) \pkg{DAKS}: An \R package for data
-  analysis methods in knowledge space theory. Manuscript under revision.
+  analysis methods in knowledge space theory. \emph{Journal of Statistical
+  Software}, \bold{37}(2), 1--31.
+  URL \url{http://www.jstatsoft.org/v37/i02/}.
 
    Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
   \emph{diff} fit measures for quasi orders.  Manuscript submitted for
