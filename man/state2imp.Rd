@@ -34,9 +34,7 @@ state2imp(P)
   URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   For any set of knowledge states the returned binary relation is a

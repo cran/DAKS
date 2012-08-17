@@ -27,9 +27,7 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \seealso{
   \code{\link{pop_iita}}. See also \code{\link{DAKS-package}} for general

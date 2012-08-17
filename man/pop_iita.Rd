@@ -111,9 +111,7 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   publication.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   The single careless error \code{ce} and lucky guess \code{lg}
@@ -143,9 +141,9 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   general information about this package.
 }
 \examples{
-x <- simu(7, 10000, ce = 0.01, lg = 0.01, delta = 0.12)
+x <- simu(3, 10000, ce = 0.05, lg = 0.05, delta = 0.12)
 y <- iita(x$dataset, v = 2)
-z <- pop_iita(x$implications, 0.01, 0.01, 7, x$dataset, v = 2)
+z <- pop_iita(x$implications, 0.05, 0.05, 3, x$dataset, v = 2)
 
 ## similar sample and population diff values are obtained
 (y$diff) / (10000^2)

@@ -54,9 +54,7 @@ z_test(dataset, imp, imp_alt = NULL,
   publication. 
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   The current version of the package \pkg{DAKS} does not support
@@ -71,8 +69,8 @@ z_test(dataset, imp, imp_alt = NULL,
   information about this package.
 }
 \examples{
-sel_set<-ind_gen(ob_counter(pisa))
-z_test(pisa, sel_set[[9]], sel_set[[10]], v = 1)
+sel_set<-ind_gen(ob_counter(pisa[, 1:3]))
+z_test(pisa[, 1:3], sel_set[[2]], sel_set[[3]], v = 1)
 }
 \keyword{htest}
 \keyword{manip}

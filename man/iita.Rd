@@ -96,9 +96,7 @@ iita(dataset, v)
   publication.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   The function \code{\link{iita}} can be used to perform one of the

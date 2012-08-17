@@ -30,9 +30,7 @@ S3 method to print objects of class \code{ztest}.
   URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \seealso{
   \code{\link{z_test}}, the function for performing a Z-test. See also \code{\link{DAKS-package}} for general

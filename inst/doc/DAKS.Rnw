@@ -965,10 +965,60 @@ are computed using the function \code{ob_counter}, and the function \code{ind_ge
 is applied to inductively generate from the returned matrix of the numbers of observed 
 counterexamples a set of quasi orders. The function \code{ind_gen} returns a list of the 
 inductively generated surmise relations.
-<<selection-set>>=
-sel_set <- ind_gen(ob_counter(pisa))
-sel_set
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> sel_set <- ind_gen(ob_counter(pisa)) 
+R> sel_set
+\end{CodeInput}
+\begin{CodeOutput}
+[[1]]
+{(1L, 5L)}
+
+[[2]]
+{(1L, 4L), (1L, 5L)}
+
+[[3]]
+{(1L, 4L), (1L, 5L), (2L, 5L)}
+
+[[4]]
+{(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L)}
+
+[[5]]
+{(1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 5L)}
+
+[[6]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 5L)}
+
+[[7]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 4L), (2L, 5L), (3L, 4L), (3L, 5L)}
+
+[[8]]
+{(1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L), (2L, 5L), (3L, 4L), 
+ (3L, 5L)}
+
+[[9]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L), (2L, 5L), (3L, 4L), 
+ (3L, 5L)}
+
+[[10]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 3L), (2L, 4L), (2L, 5L), (3L, 4L), 
+ (3L, 5L), (4L, 5L)}
+
+[[11]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L), (2L, 4L), (2L, 5L), 
+ (3L, 4L), (3L, 5L), (4L, 5L), (5L, 4L)}
+
+[[12]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L), (2L, 4L), (2L, 5L), 
+ (3L, 4L), (3L, 5L), (4L, 3L), (4L, 5L), (5L, 3L), (5L, 4L)}
+
+[[13]]
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (2L, 1L), (2L, 3L), (2L, 4L), (2L, 5L), 
+ (3L, 1L), (3L, 2L), (3L, 4L), (3L, 5L), (4L, 1L), (4L, 2L), (4L, 3L), (4L, 5L), 
+ (5L, 1L), (5L, 2L), (5L, 3L), (5L, 4L)}
+\end{CodeOutput}
+\end{CodeChunk}
+
 The quasi order with tenth index in the selection set is a chain (Footnote \ref{footnote:chain}), 
 that is, the items form a Guttman scale. The neighboring quasi orders with indices eight, nine, 
 and eleven are very close to a chain. 
@@ -1049,9 +1099,23 @@ $q_1\not\sqsubseteq q_2$ and $q_2\not\sqsubseteq q_1$.}
 We perform a $Z$-test to check whether the quasi order obtained by the corrected and minimized corrected IITA algorithms has a smaller $\mathit{diff}$ value than the quasi order forming a chain. 
 If this is not the case, we cannot say with certainty whether the derived quasi order is significantly 
 better than the chain hierarchy.
-<<z-test>>=
-z_test(pisa, sel_set[[10]], sel_set[[9]], alternative = "less", v = 1)
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> z_test(pisa, sel_set[[10]], sel_set[[9]], alternative = "less", v = 1)
+\end{CodeInput}
+\begin{CodeOutput}
+ 	 Two sample Z-test
+
+z =  2.2666  p-value =  0.0117  
+alternative hypothesis: true mean is less 0  
+95 percent confidence interval:
+  0.0001894101 Inf
+sample estimates:
+    mean in imp mean in imp_alt 
+        0.00093         0.00024 
+\end{CodeOutput}
+\end{CodeChunk}
+
 The $p$-value is $0.0117$, hence it can be assumed that the $\mathit{diff}$ value 
 of the derived quasi order is significantly smaller than the $\mathit{diff}$ value 
 of the chain. According to the $\mathit{diff}$ criterion, therefore the obtained quasi 
@@ -1086,30 +1150,77 @@ to the relation. Based on this underlying surmise relation, a binary dataset con
 items and $1500$ examinees is simulated using a same careless error and lucky guess 
 rate of $0.1$ over all items. The simulated binary dataset and the simulated surmise relation 
 and its corresponding quasi ordinal knowledge space are returned.
-<<simulated-data>>=
-ex_data <- simu(9, 1500, 0.1, 0.1, delta = 0.15)
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> ex_data <- simu(9, 1500, 0.1, 0.1, delta = 0.15)
+\end{CodeInput}
+\end{CodeChunk}
 
 The randomly generated quasi order underlying the simulated data is:
-<<simulated-relation>>=
-ex_data$implications
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> ex_data$implications
+\end{CodeInput}
+\begin{CodeOutput}
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 6L), (1L, 7L), (1L, 8L), (1L, 9L), 
+ (2L, 1L),
+ (2L, 3L), (2L, 4L), (2L, 5L), (2L, 6L), (2L, 7L), (2L, 8L), (2L, 9L), (3L, 1L), 
+ (3L, 2L),
+ (3L, 4L), (3L, 5L), (3L, 6L), (3L, 7L), (3L, 8L), (3L, 9L), (4L, 1L), (4L, 2L), 
+ (4L, 3L),
+ (4L, 5L), (4L, 6L), (4L, 7L), (4L, 8L), (4L, 9L), (5L, 1L), (5L, 2L), (5L, 3L), 
+ (5L, 4L),
+ (5L, 6L), (5L, 7L), (5L, 8L), (5L, 9L), (6L, 1L), (6L, 2L), (6L, 3L), (6L, 4L), 
+ (6L, 5L),
+ (6L, 7L), (6L, 8L), (6L, 9L), (7L, 1L), (7L, 2L), (7L, 3L), (7L, 4L), (7L, 5L), 
+ (7L, 6L),
+ (7L, 8L), (7L, 9L), (9L, 1L), (9L, 2L), (9L, 3L), (9L, 4L), (9L, 5L), (9L, 6L), 
+ (9L, 7L), (9L, 8L)}
+\end{CodeOutput}
+\end{CodeChunk}
 
 \subsubsection{Corrected IITA analyses of the simulated data}
 
 In the following, analyses are performed under the corrected IITA algorithm only; 
 under the other two algorithms the analyses are analogous. 
 We run the corrected IITA procedure on the simulated dataset.
-<<corr-iita1>>=
-ex_corr <- iita(ex_data$dataset, v = 2)
-ex_corr
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> ex_corr <- iita(ex_data$dataset, v = 2)
+R> ex_corr
+\end{CodeInput}
+\begin{CodeOutput}
+ 	 Inductive Item Tree Analysis
+
+Algorithm: corrected IITA
+
+quasi order: {(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 6L), (1L, 7L), (1L, 8L), 
+ (1L, 9L), (2L, 1L),
+ (2L, 3L), (2L, 4L), (2L, 5L), (2L, 6L), (2L, 7L), (2L, 8L), (2L, 9L), (3L, 1L), 
+ (3L, 2L),
+ (3L, 4L), (3L, 5L), (3L, 6L), (3L, 7L), (3L, 8L), (3L, 9L), (4L, 1L), (4L, 2L), 
+ (4L, 3L),
+ (4L, 5L), (4L, 6L), (4L, 7L), (4L, 8L), (4L, 9L), (5L, 1L), (5L, 2L), (5L, 3L), 
+ (5L, 4L),
+ (5L, 6L), (5L, 7L), (5L, 8L), (5L, 9L), (6L, 1L), (6L, 2L), (6L, 3L), (6L, 4L), 
+ (6L, 5L),
+ (6L, 7L), (6L, 8L), (6L, 9L), (7L, 1L), (7L, 2L), (7L, 3L), (7L, 4L), (7L, 5L), 
+ (7L, 6L),
+ (7L, 8L), (7L, 9L), (9L, 1L), (9L, 2L), (9L, 3L), (9L, 4L), (9L, 5L), (9L, 6L), 
+ (9L, 7L), (9L, 8L)}
+\end{CodeOutput}
+\end{CodeChunk}
 
 The quasi order obtained by data analysis is the true quasi order underlying the data. 
 (This of course may not always be the case.)
-<<corr-iita2>>=
-ex_corr$implications == ex_data$implications
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> ex_corr$implications == ex_data$implications
+\end{CodeInput}
+\begin{CodeOutput}
+[1] TRUE
+\end{CodeOutput}
+\end{CodeChunk}
 
 \subsubsection{Corrected IITA analyses in the population}
 
@@ -1119,10 +1230,21 @@ Next we discuss the functions which provide the basis for statistical inference 
 The corrected IITA algorithm can be performed in population quantities, yielding information 
 about the population $\mathit{diff}$ values, population occurrence probabilities of response 
 patterns, population error rates, and the inductively generated selection set:
-<<pop-iita>>=
-pop <- pop_iita(ex_data$implications, 0.1, 0.1, 9, dataset = ex_data$dataset, v = 2)
+\begin{CodeChunk}
+\begin{CodeInput}
+R> pop <- pop_iita(ex_data$implications, 0.1, 0.1, 9, dataset = ex_data$dataset, 
++    v = 2)
 attributes(pop)
-@
+\end{CodeInput}
+\begin{CodeOutput}
+$names
+[1] "pop.diff"      "pop.matrix"    "error.pop"     "selection.set" "v"            
+
+$class
+[1] "popiita"
+\end{CodeOutput}
+\end{CodeChunk}
+
 For the argument \code{imp} we use the simulated surmise relation \code{ex_data$implications}, 
 with $9$ items of the domain for this quasi order. The knowledge structure corresponding 
 to \code{ex_data$implications} is equipped with a same careless error and lucky guess rate 
@@ -1133,22 +1255,49 @@ on the sample version of the inductive generation procedure (cf.\ Section \ref{f
 \paragraph{\it Sample and population $\mathit{diff}$ values.}
 To compare sample with population $\mathit{diff}$ values, the sample $\mathit{diff}$ coefficient is transformed to become 
 the MLE for the corresponding population $\mathit{diff}$ coefficient (see Section \ref{subsec:IITA} for the definition of $\mathit{diff}$):
-<<diff1>>=
-round(ex_corr$diff / 1500^2, 4)
-@
-<<diff2>>=
-round(pop$pop.diff, 4)
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> round(ex_corr$diff / 1500^2, 4)
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.0160 0.0159 0.0156 0.0155 0.0153 0.0.0152 0.0151 0.0145 0.0133 0.0133 0.0127
+[12] 0.0116 0.0094 0.0083 0.0079 0.0068 0.0053 0.0037 0.0016 0.0011 0.0011 0.0000
+[23] 0.0000 0.0058
+\end{CodeOutput}
+\begin{CodeInput}
+R> round(pop$pop.diff, 4)
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.0167 0.0166 0.0163 0.0162 0.0160 0.0159 0.0157 0.0152 0.0141 0.0141 0.0135
+[12] 0.0124 0.0101 0.0090 0.0085 0.0073 0.0056 0.0040 0.0017 0.0012 0.0012 0.0000
+[23] 0.0000 0.0056
+\end{CodeOutput}
+\end{CodeChunk}
+
 The respective sample and population values are quite similar, already for a
 sample size of $1500$. This is obvious given the fact that the sample $\mathit{diff}$ 
 values converge in probability (and expectation) to the population $\mathit{diff}$ values
 (see Section \ref{subsec:IITA}).
 
 The quasi order with minimum population $\mathit{diff}$ value can be queried:
-<<pop-relation>>=
-mp <- which.min(pop$pop.diff)
-pop$selection.set[[mp]] 
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> mp <- which.min(pop$pop.diff)
+R> pop$selection.set[[mp]]
+\end{CodeInput}
+\begin{CodeOutput}
+{(1L, 2L), (1L, 3L), (1L, 4L), (1L, 5L), (1L, 6L), (1L, 7L), (1L, 8L), 
+ (1L, 9L), (2L, 1L), (2L, 3L), (2L, 4L), (2L, 5L), (2L, 6L), (2L, 7L), (2L, 8L),
+ (2L, 9L), (3L, 1L), (3L, 2L), (3L, 4L), (3L, 5L), (3L, 6L), (3L, 7L), 
+ (3L, 8L), (3L, 9L), (4L, 1L), (4L, 2L), (4L, 3L), (4L, 5L), (4L, 6L), (4L, 7L),
+ (4L, 8L), (4L, 9L), (5L, 1L), (5L, 2L), (5L, 3L), (5L, 4L), (5L, 6L), 
+ (5L, 7L), (5L, 8L), (5L, 9L), (6L, 1L), (6L, 2L), (6L, 3L), (6L, 4L), (6L, 5L),
+ (6L, 7L), (6L, 8L), (6L, 9L), (7L, 1L), (7L, 2L), (7L, 3L), (7L, 4L), 
+ (7L, 5L), (7L, 6L), (7L, 8L), (7L, 9L), (9L, 1L), (9L, 2L), (9L, 3L), (9L, 4L),
+ (9L, 5L), (9L, 6L), (9L, 7L), (9L, 8L)}
+\end{CodeOutput}
+\end{CodeChunk}
+
 This quasi order is the true quasi order underlying the simulated dataset. Of course this may not always be the case, especially for smaller sample sizes or higher response error rates. 
 
 The population
@@ -1172,22 +1321,45 @@ using the delta method (cf.\ Section \ref{fun}).
 
 The estimated asymptotic variance of the MLE $\mathit{diff}$ in the sample version 
 corrected IITA algorithm can be computed by:
-<<est-var>>=
-var_sample <- variance(ex_data$dataset, ex_data$implications, v = 2)
-var_sample
-sqrt(var_sample)
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> var_sample <- variance(ex_data$dataset, ex_data$implications, v = 2)
+R> var_sample
+\end{CodeInput}
+\begin{CodeOutput}
+[1] 8.944665e-05
+\end{CodeOutput}
+\begin{CodeInput}
+R> sqrt(var_sample)
+\end{CodeInput}
+\begin{CodeOutput}
+[1] 0.009457624
+\end{CodeOutput}
+\end{CodeChunk}
+
 This estimated asymptotic variance is formulated for the simulated data \code{ex_data$dataset}
 and the randomly generated surmise relation \code{ex_data$implications} 
 underlying these data.
 
 The corresponding population asymptotic variance of the MLE $\mathit{diff}$ in the population
 version corrected IITA algorithm is:
-<<pop-var>>=
-pop_variance <- pop_variance(pop$pop.matrix, pop$selection.set[[mp]], pop$error.pop[mp], v = 2)
-pop_variance
-sqrt(pop_variance)
-@
+\begin{CodeChunk}
+\begin{CodeInput}
+R> pop_variance <- pop_variance(pop$pop.matrix, pop$selection.set[[mp]], 
++    pop$error.pop[mp], v = 2)
+R> pop_variance
+\end{CodeInput}
+\begin{CodeOutput}
+[1] 4.453308e-07
+\end{CodeOutput}
+\begin{CodeInput}
+R> sqrt(pop_variance)
+\end{CodeInput}
+\begin{CodeOutput}
+[1] 0.0006673311
+\end{CodeOutput}
+\end{CodeChunk}
+
 This population asymptotic variance is formulated for the population cell probabilities 
 \linebreak
 \code{pop$pop.matrix} of the multinomial distribution and the population error rate obtained 

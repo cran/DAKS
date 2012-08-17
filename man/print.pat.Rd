@@ -30,9 +30,7 @@ Prints the main results from inductive item tree analysis algorithms.
   URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \seealso{
   See also \code{\link{DAKS-package}} for general information about this package.

@@ -67,9 +67,7 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   publication. 
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   The current version of the package \pkg{DAKS} does not support

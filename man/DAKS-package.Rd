@@ -21,8 +21,8 @@
   \tabular{ll}{
     Package: \tab \pkg{DAKS}\cr
     Type: \tab Package\cr
-    Version: \tab 2.1-1\cr
-    Date: \tab 2010-11-13\cr
+    Version: \tab 2.1-2\cr
+    Date: \tab 2012-08-17\cr
     License: \tab \acronym{GPL} (>= 2)
   }
   Knowledge space theory is a recent psychometric test theory based on
@@ -55,9 +55,7 @@
 \author{
   Anatol Sargin, Ali Uenlue
 
-  Maintainer: Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Maintainer: Ali Uenlue \email{ali.uenlue@tum.de}
 }
 \references{
   Doignon, J.-P. and Falmagne, J.-C. (1999) \emph{Knowledge Spaces}.

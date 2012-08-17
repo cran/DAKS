@@ -65,9 +65,7 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   publication. 
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   The current version of the package \pkg{DAKS} does not support
@@ -96,11 +94,13 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   general information about this package.
 }
 \examples{
+\dontrun{
 x <- simu(5, 100, 0.05, 0.05, delta = 0.15)
 y <- pop_iita(x$implications, 0.05, 0.05, 5, x$dataset, v = 2)
 pop_variance(y$pop.matrix, 
              y$selection.set[[which(y$pop.diff == min(y$pop.diff))]],
              y$error.pop[which(y$pop.diff == min(y$pop.diff))], v = 2)
+}
 }
 \keyword{htest}
 \keyword{math}

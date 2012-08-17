@@ -69,9 +69,7 @@ pattern(dataset, n = 5, P = NULL)
   URL \url{http://www.jstatsoft.org/v37/i02/}.
 }
 \author{
-  Anatol Sargin \email{sargin@statistik.tu-dortmund.de},
-
-  Ali Uenlue \email{uenlue@statistik.tu-dortmund.de}
+  Anatol Sargin, Ali Uenlue
 }
 \note{
   Although \code{pattern} is intended for use with dichotomous data, it
