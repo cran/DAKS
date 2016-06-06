@@ -39,8 +39,7 @@ iita(dataset, v)
   interpretation of \eqn{(i, j)} as `mastering item \eqn{j} implies
   mastering item \eqn{i}.') The algorithms are described in the paper
   about the \pkg{DAKS} package by \cite{Uenlue and Sargin (2010)}, and
-  in the papers by \cite{Sargin and Uenlue (2009)} and
-  \cite{Uenlue and Sargin (2010)}.
+  in the paper by \cite{Sargin and Uenlue (2009)}.
 
   \code{iita} calls \code{\link{ind_gen}} for constructing the set of
   competing quasi orders according to the inductive generation
@@ -90,10 +89,6 @@ iita(dataset, v)
   analysis methods in knowledge space theory. \emph{Journal of Statistical
   Software}, \bold{37}(2), 1--31.
   URL \url{http://www.jstatsoft.org/v37/i02/}.
-
- Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
-  \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.
 }
 \author{
   Anatol Sargin, Ali Uenlue

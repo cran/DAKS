@@ -49,8 +49,7 @@ pop_iita(imp, ce, lg, items, dataset = NULL, A = NULL, v)
   the expected numbers of counterexamples.  For details see
   \code{\link{iita}}.  The algorithms are described in the paper about
   the \pkg{DAKS} package by \cite{Uenlue and Sargin (2010)}, and in
-  the papers by \cite{Sargin and Uenlue (2009)} and
-  \cite{Uenlue and Sargin (2010)}.
+  the paper by \cite{Sargin and Uenlue (2009)}.
 
   Compared to \code{\link{iita}}, the function \code{pop_iita}
   implements the three inductive item tree analysis algorithms in
@@ -105,10 +104,6 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
   analysis methods in knowledge space theory. \emph{Journal of Statistical
   Software}, \bold{37}(2), 1--31.
   URL \url{http://www.jstatsoft.org/v37/i02/}.
-  
- Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
-  \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication.
 }
 \author{
   Anatol Sargin, Ali Uenlue

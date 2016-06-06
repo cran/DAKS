@@ -53,7 +53,8 @@ Sargin, A. and Uenlue, A. (2009) Inductive item tree analysis:
 \seealso{
   \code{\link{ob_counter}} for computation of numbers of
   counterexamples; \code{\link{iita}}, the interface that provides the
-  three inductive item tree analysis methods under one umbrella\code{\link{z_test}} for one- and two-sample Z-tests.  See
+  three inductive item tree analysis methods under one umbrella;
+  \code{\link{z_test}} for one- and two-sample Z-tests.  See
   also \code{\link{DAKS-package}} for general information about this
   package.
 }

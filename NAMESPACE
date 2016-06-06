@@ -6,12 +6,13 @@ export(corr_iita, hasse, iita, imp2state, ind_gen, mini_iita,
 # internal functions; not intended to be visible to users
 # export()
 
-import(graphics, relations, sets)
+import(graphics, stats)
+import(relations, sets)
 
 S3method(print, iita)
 S3method(print, popiita)
-S3method(summary, popiita)
 S3method(summary, iita)
+S3method(summary, popiita)
+S3method(print, pat)
 S3method(print, summpopiita)
 S3method(print, ztest)
-S3method(print, pat)

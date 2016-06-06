@@ -48,10 +48,6 @@ z_test(dataset, imp, imp_alt = NULL,
   analysis methods in knowledge space theory. \emph{Journal of Statistical
   Software}, \bold{37}(2), 1--31.
   URL \url{http://www.jstatsoft.org/v37/i02/}.
-
-   Uenlue, A. and Sargin, A. (2010) Maximum likelihood methodology for
-  \emph{diff} fit measures for quasi orders.  Manuscript submitted for
-  publication. 
 }
 \author{
   Anatol Sargin, Ali Uenlue
